@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: thsc-admin
+    env: node
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: DISCORD_CLIENT_ID
+        sync: false
+      - key: DISCORD_CLIENT_SECRET
+        sync: false
+      - key: DISCORD_CALLBACK_URL
+        sync: false
+      - key: OWNER_DISCORD_ID
+        value: 332059572523237386
+      - key: PUBLIC_SITE_URL
+        value: https://thehoustonclutchers.netlify.app
+      - key: DISCORD_WEBHOOK_URL
+        value: ""

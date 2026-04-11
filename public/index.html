@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>T!H$C Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --black:    #0a0a0b;
+    --charcoal: #0f0f12;
+    --surface:  #14141a;
+    --surface2: #1a1a22;
+    --surface3: #20202a;
+    --border:   rgba(255,255,255,0.07);
+    --borderH:  rgba(255,255,255,0.13);
+    --borderA:  rgba(124,92,191,0.4);
+    --white:    #f0eee8;
+    --muted:    rgba(240,238,232,0.55);
+    --dim:      rgba(240,238,232,0.28);
+    --purple:   #7c5cbf;
+    --purpleL:  #9b7fd4;
+    --purpleG:  rgba(124,92,191,0.15);
+    --green:    #4ade80;
+    --greenB:   rgba(74,222,128,0.1);
+    --red:      #f87171;
+    --redB:     rgba(248,113,113,0.1);
+    --yellow:   #fbbf24;
+    --yellowB:  rgba(251,191,36,0.1);
+    --blue:     #60a5fa;
+    --blueB:    rgba(96,165,250,0.1);
+    --FD: 'Syne', sans-serif;
+    --FB: 'DM Sans', sans-serif;
+    --FM: 'DM Mono', monospace;
+    --sw: 230px;
+    --r:  8px;
+    --rl: 12px;
+  }
+  html, body { height: 100%; }
+  body { background: var(--black); color: var(--white); font-family: var(--FB); font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased; display: flex; overflow: hidden; height: 100vh; }
+
+  /* SIDEBAR */
+  .sb { width: var(--sw); min-width: var(--sw); background: var(--charcoal); border-right: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh; overflow-y: auto; }
+  .sb-head { padding: 18px 14px 14px; border-bottom: 1px solid var(--border); }
+  .sb-logo { display: flex; align-items: center; gap: 9px; margin-bottom: 4px; }
+  .sb-icon { width: 32px; height: 32px; background: var(--purple); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-family: var(--FD); font-weight: 800; font-size: 11px; color: #fff; flex-shrink: 0; }
+  .sb-name { font-family: var(--FD); font-size: 14px; font-weight: 800; }
+  .sb-name span { color: var(--purpleL); }
+  .sb-pill { display: inline-flex; align-items: center; gap: 5px; font-size: 10px; color: var(--dim); background: var(--surface2); border: 1px solid var(--border); padding: 2px 9px; border-radius: 20px; margin-top: 5px; }
+  .sb-pill::before { content:''; width:5px; height:5px; border-radius:50%; background: var(--green); }
+  .ng { padding: 14px 7px 2px; }
+  .ng-lbl { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--dim); padding: 0 8px 6px; display: block; }
+  .ni { display: flex; align-items: center; gap: 8px; padding: 7px 9px; border-radius: var(--r); cursor: pointer; color: var(--muted); font-size: 13px; font-weight: 400; transition: all .15s; margin-bottom: 1px; border: none; background: none; width: 100%; text-align: left; font-family: var(--FB); }
+  .ni:hover { background: var(--surface2); color: var(--white); }
+  .ni.active { background: var(--purpleG); color: var(--purpleL); font-weight: 500; border: 1px solid var(--borderA); }
+  .ni .ico { font-size: 14px; width: 17px; text-align: center; flex-shrink: 0; }
+  .ni-badge { margin-left: auto; background: var(--purple); color: #fff; font-size: 10px; font-weight: 600; padding: 1px 6px; border-radius: 10px; font-family: var(--FM); }
+  .sb-foot { margin-top: auto; padding: 10px; border-top: 1px solid var(--border); }
+  .u-card { display: flex; align-items: center; gap: 9px; padding: 8px 9px; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--r); }
+  .u-av { width: 28px; height: 28px; border-radius: 50%; background: var(--purple); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; overflow: hidden; }
+  .u-av img { width: 100%; height: 100%; object-fit: cover; }
+  .u-name { font-size: 12px; font-weight: 500; }
+  .u-role { font-size: 10px; color: var(--muted); }
+  .u-out { margin-left: auto; background: none; border: none; color: var(--dim); cursor: pointer; font-size: 13px; transition: color .2s; padding: 2px; }
+  .u-out:hover { color: var(--red); }
+
+  /* MAIN */
+  .main { flex: 1; display: flex; flex-direction: column; min-width: 0; height: 100vh; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 58px; border-bottom: 1px solid var(--border); background: var(--charcoal); flex-shrink: 0; }
+  .tb-l { display: flex; align-items: center; gap: 10px; }
+  .tb-title { font-family: var(--FD); font-size: 15px; font-weight: 700; }
+  .tb-crumb { font-size: 12px; color: var(--dim); }
+  .tb-r { display: flex; align-items: center; gap: 8px; }
+  .live-dot { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); background: var(--surface2); border: 1px solid var(--border); padding: 4px 11px; border-radius: 20px; }
+  .live-dot::before { content:''; width:5px; height:5px; border-radius:50%; background: var(--green); animation: blink 2s ease-in-out infinite; }
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+  .content { flex: 1; overflow-y: auto; padding: 24px; }
+
+  /* BUTTONS */
+  .btn { display: inline-flex; align-items: center; gap: 5px; padding: 7px 13px; border-radius: var(--r); font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--borderH); background: var(--surface2); color: var(--white); transition: all .15s; font-family: var(--FB); white-space: nowrap; }
+  .btn:hover { background: var(--surface3); }
+  .btn:disabled { opacity: .4; cursor: not-allowed; }
+  .btn-p { background: var(--purple); border-color: var(--purple); color: #fff; }
+  .btn-p:hover { background: #6b4dab; border-color: #6b4dab; }
+  .btn-sm { padding: 5px 11px; font-size: 12px; }
+  .btn-xs { padding: 3px 8px; font-size: 11px; }
+  .btn-d { background: var(--redB); border-color: rgba(248,113,113,.25); color: var(--red); }
+  .btn-s { background: var(--greenB); border-color: rgba(74,222,128,.25); color: var(--green); }
+
+  /* CARDS */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 18px; }
+  .ct { font-family: var(--FD); font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+
+  /* GRIDS */
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
+  .g4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+
+  /* FORMS */
+  .field { margin-bottom: 16px; }
+  .field:last-child { margin-bottom: 0; }
+  label { display: block; font-size: 11.5px; font-weight: 500; color: var(--muted); margin-bottom: 5px; }
+  input[type=text], input[type=url], input[type=password], textarea, select { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--r); padding: 8px 11px; color: var(--white); font-family: var(--FB); font-size: 13px; outline: none; transition: border-color .2s; }
+  input:focus, textarea:focus, select:focus { border-color: var(--purple); background: var(--surface3); }
+  textarea { resize: vertical; min-height: 72px; line-height: 1.7; }
+  select { cursor: pointer; }
+  select option { background: var(--surface3); }
+  .hint { font-size: 11px; color: var(--dim); margin-top: 4px; }
+  .fr { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+  /* TOGGLE */
+  .trow { display: flex; align-items: center; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid var(--border); }
+  .trow:last-child { border-bottom: none; }
+  .tinfo { flex: 1; }
+  .tlabel { font-size: 13.5px; font-weight: 500; }
+  .tdesc { font-size: 11.5px; color: var(--muted); margin-top: 1px; }
+  .toggle { position: relative; width: 38px; height: 21px; flex-shrink: 0; margin-left: 14px; }
+  .toggle input { opacity: 0; width: 0; height: 0; }
+  .trk { position: absolute; inset: 0; background: var(--surface3); border: 1px solid var(--borderH); border-radius: 100px; cursor: pointer; transition: all .2s; }
+  .trk::before { content:''; position: absolute; width: 15px; height: 15px; left: 2px; top: 2px; background: var(--muted); border-radius: 50%; transition: all .2s; }
+  .toggle input:checked + .trk { background: var(--purple); border-color: var(--purple); }
+  .toggle input:checked + .trk::before { transform: translateX(17px); background: #fff; }
+
+  /* STATS */
+  .sc { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 14px 16px; }
+  .slabel { font-size: 10.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
+  .sval { font-family: var(--FD); font-size: 24px; font-weight: 800; letter-spacing: -.5px; color: var(--white); margin-bottom: 5px; }
+  .ssub { font-size: 11px; color: var(--dim); }
+  .sch { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 20px; }
+  .sch.up { background: var(--greenB); color: var(--green); }
+  .sch.down { background: var(--redB); color: var(--red); }
+
+  /* STATUS BADGES */
+  .sb2 { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 20px; }
+  .sb2::before { content:''; width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+  .sb2.on  { background: var(--greenB);  color: var(--green);  } .sb2.on::before  { background: var(--green); }
+  .sb2.off { background: var(--redB);    color: var(--red);    } .sb2.off::before { background: var(--red); }
+  .sb2.wrn { background: var(--yellowB); color: var(--yellow); } .sb2.wrn::before { background: var(--yellow); }
+
+  /* PAGE HEADER */
+  .ph { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; gap: 14px; }
+  .ph h1 { font-family: var(--FD); font-size: 20px; font-weight: 800; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 3px; }
+  .ph p { font-size: 12.5px; color: var(--muted); }
+  .ph-a { display: flex; gap: 7px; flex-shrink: 0; }
+
+  /* TABS */
+  .tabs { display: flex; gap: 3px; margin-bottom: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 3px; width: fit-content; }
+  .tab { padding: 5px 13px; border-radius: 5px; border: none; background: none; font-size: 12.5px; font-weight: 500; color: var(--muted); cursor: pointer; transition: all .15s; font-family: var(--FB); }
+  .tab:hover { color: var(--white); }
+  .tab.active { background: var(--surface3); color: var(--white); }
+
+  /* VIEWS */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* TABLE */
+  table { width: 100%; border-collapse: collapse; }
+  th { font-size: 10.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
+  td { padding: 10px 12px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: rgba(255,255,255,.015); }
+
+  /* TAGS */
+  .tag { display: inline-flex; align-items: center; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 20px; background: var(--surface3); color: var(--muted); border: 1px solid var(--border); }
+  .tag.g { background: var(--greenB);  color: var(--green);  border-color: rgba(74,222,128,.25); }
+  .tag.r { background: var(--redB);    color: var(--red);    border-color: rgba(248,113,113,.25); }
+  .tag.y { background: var(--yellowB); color: var(--yellow); border-color: rgba(251,191,36,.25); }
+  .tag.p { background: var(--purpleG); color: var(--purpleL); border-color: rgba(124,92,191,.25); }
+  .tag.b { background: var(--blueB);   color: var(--blue);   border-color: rgba(96,165,250,.25); }
+
+  /* BARS */
+  .bar-row { display: flex; align-items: center; gap: 9px; margin-bottom: 9px; }
+  .bar-lbl { font-size: 12px; color: var(--muted); width: 130px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .bar-tr { flex: 1; height: 5px; background: var(--surface3); border-radius: 100px; overflow: hidden; }
+  .bar-f { height: 100%; border-radius: 100px; background: var(--purple); }
+  .bar-v { font-family: var(--FM); font-size: 11px; color: var(--muted); min-width: 36px; text-align: right; }
+
+  /* UPLOAD ZONE */
+  .uzone { border: 1.5px dashed var(--borderH); border-radius: var(--r); padding: 20px; text-align: center; cursor: pointer; transition: all .2s; background: var(--surface2); }
+  .uzone:hover { border-color: var(--purple); background: var(--purpleG); }
+  .uzone-icon { font-size: 26px; margin-bottom: 6px; }
+  .uzone-lbl { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
+  .uzone-hint { font-size: 11px; color: var(--dim); }
+
+  /* TEAM AVATAR */
+  .t-av { width: 34px; height: 34px; border-radius: 50%; overflow: hidden; background: var(--purple); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; }
+  .t-av img { width: 100%; height: 100%; object-fit: cover; }
+
+  /* MISC */
+  .row { display: flex; align-items: center; }
+  .gap8 { gap: 8px; } .gap12 { gap: 12px; } .gap16 { gap: 16px; }
+  .jb { justify-content: space-between; }
+  .mt8 { margin-top: 8px; } .mt12 { margin-top: 12px; } .mt16 { margin-top: 16px; } .mt20 { margin-top: 20px; }
+  .mb12 { margin-bottom: 12px; } .mb16 { margin-bottom: 16px; }
+  .text-mono { font-family: var(--FM); }
+  .text-muted { color: var(--muted); }
+  .text-dim { color: var(--dim); }
+  .text-p { color: var(--purpleL); }
+  .text-g { color: var(--green); }
+  .text-r { color: var(--red); }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
+  /* SAVE BAR */
+  .save-bar { position: fixed; bottom: 0; left: var(--sw); right: 0; background: var(--charcoal); border-top: 1px solid var(--border); padding: 11px 24px; display: flex; align-items: center; justify-content: space-between; z-index: 50; transition: transform .3s; }
+  .save-bar.hidden { transform: translateY(100%); }
+  .save-bar p { font-size: 12.5px; color: var(--muted); }
+  .save-bar p strong { color: var(--yellow); }
+
+  /* TOAST */
+  .toast { position: fixed; bottom: 60px; right: 20px; z-index: 100; background: var(--surface3); border: 1px solid var(--borderA); border-radius: var(--r); padding: 9px 14px; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 7px; transform: translateY(16px); opacity: 0; transition: all .3s; pointer-events: none; }
+  .toast.show { transform: none; opacity: 1; }
+
+  /* MODAL */
+  .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 200; display: none; align-items: center; justify-content: center; }
+  .modal-bg.open { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--borderH); border-radius: var(--rl); padding: 24px; width: 100%; max-width: 480px; }
+  .modal-title { font-family: var(--FD); font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+
+  /* LOADING */
+  .loading { display: flex; align-items: center; justify-content: center; padding: 48px; color: var(--dim); font-size: 13px; gap: 10px; }
+  .spin { width: 16px; height: 16px; border: 2px solid var(--border); border-top-color: var(--purple); border-radius: 50%; animation: spin .7s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 10px; }
+
+  /* ROLE BADGE COLORS */
+  .role-owner { background: rgba(251,191,36,.15); color: var(--yellow); border: 1px solid rgba(251,191,36,.25); }
+  .role-admin { background: var(--purpleG); color: var(--purpleL); border: 1px solid rgba(124,92,191,.25); }
+  .role-moderator { background: var(--blueB); color: var(--blue); border: 1px solid rgba(96,165,250,.25); }
+</style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sb">
+  <div class="sb-head">
+    <div class="sb-logo">
+      <div class="sb-icon">T!H$C</div>
+      <div class="sb-name">T<span>!</span>H<span>$</span>C</div>
+    </div>
+    <div class="sb-pill">Admin Dashboard</div>
+  </div>
+
+  <div class="ng">
+    <span class="ng-lbl">Overview</span>
+    <button class="ni active" onclick="nav('overview',this)"><span class="ico">◈</span> Overview</button>
+  </div>
+  <div class="ng">
+    <span class="ng-lbl">Website</span>
+    <button class="ni" onclick="nav('content',this)"><span class="ico">✏️</span> Content Editor</button>
+    <button class="ni" onclick="nav('branding',this)"><span class="ico">🎨</span> Branding & Theme</button>
+    <button class="ni" onclick="nav('sections',this)"><span class="ico">⊞</span> Section Manager</button>
+  </div>
+  <div class="ng">
+    <span class="ng-lbl">Discord</span>
+    <button class="ni" onclick="nav('discord',this)"><span class="ico">🔗</span> Discord Settings</button>
+  </div>
+  <div class="ng">
+    <span class="ng-lbl">Community</span>
+    <button class="ni" onclick="nav('forms',this)"><span class="ico">📋</span> Forms & Submissions <span class="ni-badge" id="unreadBadge">0</span></button>
+    <button class="ni" onclick="nav('analytics',this)"><span class="ico">📊</span> Analytics</button>
+  </div>
+  <div class="ng">
+    <span class="ng-lbl">Team</span>
+    <button class="ni" onclick="nav('team',this)"><span class="ico">👥</span> Team & Admins</button>
+  </div>
+  <div class="ng">
+    <span class="ng-lbl">Coming Soon</span>
+    <button class="ni" style="opacity:.35;cursor:not-allowed" disabled><span class="ico">🛡️</span> Moderation</button>
+    <button class="ni" style="opacity:.35;cursor:not-allowed" disabled><span class="ico">🏆</span> Role Rewards</button>
+  </div>
+
+  <div class="sb-foot">
+    <div class="u-card">
+      <div class="u-av" id="sidebarAvatar">–</div>
+      <div>
+        <div class="u-name" id="sidebarName">Loading…</div>
+        <div class="u-role" id="sidebarRole">–</div>
+      </div>
+      <button class="u-out" title="Sign out" onclick="logout()">⏏</button>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main">
+  <header class="topbar">
+    <div class="tb-l">
+      <div class="tb-title">T!H$C Admin</div>
+      <span class="tb-crumb text-dim">/</span>
+      <span class="tb-crumb" id="crumb">Overview</span>
+    </div>
+    <div class="tb-r">
+      <div class="live-dot">Live</div>
+      <a href="https://thehoustonclutchers.netlify.app" target="_blank" class="btn btn-sm">↗ View Site</a>
+      <button class="btn btn-sm btn-p" onclick="saveAll()">✓ Save Changes</button>
+    </div>
+  </header>
+
+  <div class="content" id="mainContent">
+
+    <!-- ═══ OVERVIEW ═══ -->
+    <div class="view active" id="view-overview">
+      <div class="ph">
+        <div><h1>Overview</h1><p>Welcome back. Here's what's happening with T!H$C.</p></div>
+      </div>
+      <div class="g4 mb16" id="overviewStats">
+        <div class="sc"><div class="slabel">Page Views</div><div class="sval" id="ov-views">—</div><div class="ssub">last 30 days</div></div>
+        <div class="sc"><div class="slabel">Unique Visitors</div><div class="sval" id="ov-visitors">—</div><div class="ssub">last 30 days</div></div>
+        <div class="sc"><div class="slabel">Form Submissions</div><div class="sval" id="ov-forms">—</div><div class="ssub">total</div></div>
+        <div class="sc"><div class="slabel">CTA Clicks</div><div class="sval" id="ov-cta">—</div><div class="ssub">last 30 days</div></div>
+      </div>
+      <div class="g2">
+        <div class="card">
+          <div class="ct">System Status</div>
+          <div class="trow"><span class="text-muted">Website</span><span class="sb2 on">Online</span></div>
+          <div class="trow"><span class="text-muted">Discord Server</span><span class="sb2 on">Connected</span></div>
+          <div class="trow"><span class="text-muted">Form submissions</span><span class="sb2 on">Receiving</span></div>
+          <div class="trow"><span class="text-muted">Discord Webhook</span><span id="webhookStatus" class="sb2 wrn">Not configured</span></div>
+        </div>
+        <div class="card">
+          <div class="ct">Quick Actions</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;">
+            <button class="btn btn-sm" onclick="nav('content',null)">✏️ Edit Content</button>
+            <button class="btn btn-sm" onclick="nav('discord',null)">🔗 Update Invite Link</button>
+            <button class="btn btn-sm" onclick="nav('forms',null)">📋 View Submissions</button>
+            <button class="btn btn-sm" onclick="nav('team',null)">👥 Manage Team</button>
+            <button class="btn btn-sm" onclick="nav('branding',null)">🎨 Change Colors</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ CONTENT ═══ -->
+    <div class="view" id="view-content">
+      <div class="ph">
+        <div><h1>Content Editor</h1><p>Edit all website text without touching code.</p></div>
+        <div class="ph-a">
+          <button class="btn btn-sm btn-p" onclick="saveContent()">✓ Save Content</button>
+        </div>
+      </div>
+      <div class="tabs" id="cTabs">
+        <button class="tab active" onclick="cTab('hero',this)">Hero</button>
+        <button class="tab" onclick="cTab('about',this)">About</button>
+        <button class="tab" onclick="cTab('features',this)">Features</button>
+        <button class="tab" onclick="cTab('faq',this)">FAQ</button>
+        <button class="tab" onclick="cTab('cta',this)">CTA</button>
+      </div>
+      <div id="ct-hero">
+        <div class="g2" style="gap:16px;">
+          <div class="card">
+            <div class="ct">Hero Text</div>
+            <div class="field"><label>Eyebrow</label><input type="text" id="f-hero_eyebrow" /></div>
+            <div class="field"><label>Main Title</label><input type="text" id="f-hero_title" /></div>
+            <div class="field"><label>Subtitle</label><input type="text" id="f-hero_subtitle" /></div>
+            <div class="field"><label>Tagline</label><textarea id="f-hero_tagline" rows="3"></textarea></div>
+            <div class="field"><label>Primary CTA</label><input type="text" id="f-hero_cta1_text" /></div>
+            <div class="field"><label>Secondary CTA</label><input type="text" id="f-hero_cta2_text" /></div>
+          </div>
+          <div class="card">
+            <div class="ct">Hero Stats</div>
+            <div class="fr mb16"><div class="field"><label>Stat 1 Value</label><input type="text" id="f-hero_stat1_val" /></div><div class="field"><label>Label</label><input type="text" id="f-hero_stat1_label" /></div></div>
+            <div class="fr mb16"><div class="field"><label>Stat 2 Value</label><input type="text" id="f-hero_stat2_val" /></div><div class="field"><label>Label</label><input type="text" id="f-hero_stat2_label" /></div></div>
+            <div class="fr mb16"><div class="field"><label>Stat 3 Value</label><input type="text" id="f-hero_stat3_val" /></div><div class="field"><label>Label</label><input type="text" id="f-hero_stat3_label" /></div></div>
+            <div class="fr"><div class="field"><label>Stat 4 Value</label><input type="text" id="f-hero_stat4_val" /></div><div class="field"><label>Label</label><input type="text" id="f-hero_stat4_label" /></div></div>
+          </div>
+        </div>
+      </div>
+      <div id="ct-about" style="display:none">
+        <div class="card">
+          <div class="ct">About Section</div>
+          <div class="g2" style="gap:16px;">
+            <div>
+              <div class="field"><label>Section Label</label><input type="text" id="f-about_label" /></div>
+              <div class="field"><label>Heading Line 1</label><input type="text" id="f-about_heading1" /></div>
+              <div class="field"><label>Heading Line 2</label><input type="text" id="f-about_heading2" /></div>
+              <div class="field"><label>Lead Paragraph</label><textarea id="f-about_sub" rows="3"></textarea></div>
+              <div class="field"><label>Body Paragraph</label><textarea id="f-about_body" rows="4"></textarea></div>
+            </div>
+            <div>
+              <div class="field"><label>Pill Tags (one per line)</label><textarea id="f-about_pills" rows="9" style="font-family:var(--FM)"></textarea><div class="hint">Each line = one pill tag</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="ct-features" style="display:none">
+        <div class="card mb16">
+          <div class="ct">Section Header</div>
+          <div class="fr mb12"><div class="field"><label>Label</label><input type="text" id="f-features_label" /></div><div class="field"><label>Heading</label><input type="text" id="f-features_heading" /></div></div>
+          <div class="field"><label>Subheading</label><input type="text" id="f-features_sub" /></div>
+        </div>
+        <div class="ph" style="margin-bottom:12px;">
+          <div><p class="text-muted" style="font-size:13px;">Feature cards shown in the "What's Inside" section.</p></div>
+          <button class="btn btn-sm btn-p" onclick="addFeature()">+ Add Card</button>
+        </div>
+        <div id="featureCards"></div>
+      </div>
+      <div id="ct-faq" style="display:none">
+        <div class="card mb16">
+          <div class="ct">Section Header</div>
+          <div class="fr"><div class="field"><label>Label</label><input type="text" id="f-faq_label" /></div><div class="field"><label>Heading</label><input type="text" id="f-faq_heading" /></div></div>
+        </div>
+        <div class="ph" style="margin-bottom:12px;">
+          <div><p class="text-muted" style="font-size:13px;">FAQ items shown on the public site.</p></div>
+          <button class="btn btn-sm btn-p" onclick="addFaq()">+ Add Question</button>
+        </div>
+        <div id="faqCards"></div>
+      </div>
+      <div id="ct-cta" style="display:none">
+        <div class="card">
+          <div class="ct">CTA Section</div>
+          <div class="g2" style="gap:16px;">
+            <div>
+              <div class="field"><label>Label</label><input type="text" id="f-cta_label" /></div>
+              <div class="field"><label>Heading</label><input type="text" id="f-cta_heading" /></div>
+              <div class="field"><label>Description</label><textarea id="f-cta_desc" rows="3"></textarea></div>
+              <div class="field"><label>Button 1 Text</label><input type="text" id="f-cta_btn1_text" /></div>
+              <div class="field"><label>Button 2 Text</label><input type="text" id="f-cta_btn2_text" /></div>
+              <div class="field"><label>Button 3 Text</label><input type="text" id="f-cta_btn3_text" /></div>
+            </div>
+            <div>
+              <div class="field"><label>Nav CTA Text</label><input type="text" id="f-nav_cta_text" /></div>
+              <div class="field"><label>Footer Copyright</label><input type="text" id="f-footer_copy" /></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ BRANDING ═══ -->
+    <div class="view" id="view-branding">
+      <div class="ph">
+        <div><h1>Branding & Theme</h1><p>Colors, fonts, and imagery for the public site.</p></div>
+        <div class="ph-a"><button class="btn btn-sm btn-p" onclick="saveBranding()">✓ Save Theme</button></div>
+      </div>
+      <div class="g2" style="gap:16px;">
+        <div class="card">
+          <div class="ct">Colors</div>
+          <div class="field"><label>Accent Color</label><div class="row gap8"><input type="color" id="f-accent_color" style="width:42px;height:36px;padding:3px;cursor:pointer;" /><input type="text" id="f-accent_color_hex" style="font-family:var(--FM)" oninput="syncHex('accent_color')" /></div></div>
+          <div class="field"><label>Accent Light</label><div class="row gap8"><input type="color" id="f-accent_light" style="width:42px;height:36px;padding:3px;cursor:pointer;" /><input type="text" id="f-accent_light_hex" style="font-family:var(--FM)" oninput="syncHex('accent_light')" /></div></div>
+        </div>
+        <div class="card">
+          <div class="ct">Display Options</div>
+          <div class="trow"><div class="tinfo"><div class="tlabel">Show Top.gg widget</div><div class="tdesc">Large widget in the CTA section</div></div><label class="toggle"><input type="checkbox" id="f-show_topgg_widget" /><span class="trk"></span></label></div>
+          <div class="trow"><div class="tinfo"><div class="tlabel">Show member count</div><div class="tdesc">Live Discord member count in hero stats</div></div><label class="toggle"><input type="checkbox" id="f-show_member_count" /><span class="trk"></span></label></div>
+          <div class="trow"><div class="tinfo"><div class="tlabel">Show Discord widget</div><div class="tdesc">Embeds the Discord server widget</div></div><label class="toggle"><input type="checkbox" id="f-show_discord_widget" /><span class="trk"></span></label></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SECTIONS ═══ -->
+    <div class="view" id="view-sections">
+      <div class="ph">
+        <div><h1>Section Manager</h1><p>Toggle sections on/off. Drag to reorder.</p></div>
+        <div class="ph-a"><button class="btn btn-sm btn-p" onclick="saveSections()">✓ Save Order</button></div>
+      </div>
+      <div class="card"><div class="ct">Page Sections</div><div id="sectionList"></div></div>
+    </div>
+
+    <!-- ═══ DISCORD ═══ -->
+    <div class="view" id="view-discord">
+      <div class="ph">
+        <div><h1>Discord Settings</h1><p>Invite links, webhooks, and display options.</p></div>
+        <div class="ph-a"><button class="btn btn-sm btn-p" onclick="saveDiscord()">✓ Save Settings</button></div>
+      </div>
+      <div class="g2" style="gap:16px;margin-bottom:16px;">
+        <div class="card">
+          <div class="ct">Links</div>
+          <div class="field"><label>Discord Invite Link (used site-wide)</label><input type="url" id="f-discord_invite" /><div class="hint">Used in nav, hero, and CTA automatically</div></div>
+          <div class="field"><label>Top.gg Server ID</label><input type="text" id="f-topgg_server_id" /></div>
+          <div class="field"><label>TikTok URL</label><input type="url" id="f-tiktok_url" /></div>
+        </div>
+        <div class="card">
+          <div class="ct">Webhook</div>
+          <div class="field"><label>Discord Webhook URL</label><input type="url" id="f-discord_webhook_url" placeholder="https://discord.com/api/webhooks/..." /><div class="hint">Create in Discord: Channel Settings → Integrations → Webhooks</div></div>
+          <div class="trow mt8"><div class="tinfo"><div class="tlabel">Enable webhook notifications</div><div class="tdesc">Send form submissions to Discord</div></div><label class="toggle"><input type="checkbox" id="f-webhook_enabled" /><span class="trk"></span></label></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ FORMS ═══ -->
+    <div class="view" id="view-forms">
+      <div class="ph">
+        <div><h1>Forms & Submissions</h1><p>Manage incoming form submissions.</p></div>
+      </div>
+      <div class="g3 mb16" id="formCounts">
+        <div class="sc"><div class="slabel">Contact</div><div class="sval" id="fc-contact">—</div><div class="ssub">submissions</div></div>
+        <div class="sc"><div class="slabel">Staff Applications</div><div class="sval" id="fc-staff">—</div><div class="ssub">applications</div></div>
+        <div class="sc"><div class="slabel">Ban Appeals</div><div class="sval" id="fc-ban">—</div><div class="ssub">appeals</div></div>
+      </div>
+      <div class="tabs">
+        <button class="tab active" onclick="loadSubmissions('contact',this)">Contact</button>
+        <button class="tab" onclick="loadSubmissions('staff',this)">Staff Application</button>
+        <button class="tab" onclick="loadSubmissions('ban',this)">Ban Appeal</button>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div id="submissionsTable"><div class="loading"><div class="spin"></div> Loading submissions…</div></div>
+      </div>
+    </div>
+
+    <!-- ═══ ANALYTICS ═══ -->
+    <div class="view" id="view-analytics">
+      <div class="ph">
+        <div><h1>Analytics</h1><p>Traffic and engagement overview.</p></div>
+      </div>
+      <div class="g4 mb16">
+        <div class="sc"><div class="slabel">Page Views</div><div class="sval" id="an-views">—</div></div>
+        <div class="sc"><div class="slabel">Unique Visitors</div><div class="sval" id="an-visitors">—</div></div>
+        <div class="sc"><div class="slabel">CTA Clicks</div><div class="sval" id="an-cta">—</div></div>
+        <div class="sc"><div class="slabel">Form Submissions</div><div class="sval" id="an-forms">—</div></div>
+      </div>
+      <div class="g2">
+        <div class="card"><div class="ct">CTA Clicks by Button</div><div id="an-ctaBars"><div class="text-dim" style="font-size:12px;padding:8px 0;">No data yet</div></div></div>
+        <div class="card"><div class="ct">Top Referrers</div><div id="an-refBars"><div class="text-dim" style="font-size:12px;padding:8px 0;">No data yet</div></div></div>
+      </div>
+    </div>
+
+    <!-- ═══ TEAM ═══ -->
+    <div class="view" id="view-team">
+      <div class="ph">
+        <div><h1>Team & Admins</h1><p>Manage who has access to this dashboard.</p></div>
+        <div class="ph-a"><button class="btn btn-sm btn-p" onclick="openAddMember()">+ Add Member</button></div>
+      </div>
+
+      <!-- Role explanation -->
+      <div class="g3 mb16">
+        <div class="card" style="border-color:rgba(251,191,36,.2)">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span class="tag y">Owner</span>
+          </div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.7;">Full access to everything. Can add/remove any member. Cannot be removed. That's you.</div>
+        </div>
+        <div class="card" style="border-color:rgba(124,92,191,.2)">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span class="tag p">Admin</span>
+          </div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.7;">Can edit all content, manage settings, view and manage all forms. Can add moderators but not other admins.</div>
+        </div>
+        <div class="card" style="border-color:rgba(96,165,250,.2)">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+            <span class="tag b">Moderator</span>
+          </div>
+          <div style="font-size:12.5px;color:var(--muted);line-height:1.7;">Can view and manage form submissions only. Cannot edit site content or settings.</div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:0;overflow:hidden;">
+        <div id="teamTable"><div class="loading"><div class="spin"></div> Loading team…</div></div>
+      </div>
+    </div>
+
+  </div><!-- /content -->
+</div><!-- /main -->
+
+<!-- ═══ SAVE BAR ═══ -->
+<div class="save-bar hidden" id="saveBar">
+  <p>You have <strong>unsaved changes</strong></p>
+  <div class="row gap8">
+    <button class="btn btn-sm" onclick="document.getElementById('saveBar').classList.add('hidden')">Discard</button>
+    <button class="btn btn-sm btn-p" onclick="saveAll()">✓ Save</button>
+  </div>
+</div>
+
+<!-- ═══ TOAST ═══ -->
+<div class="toast" id="toast"><span id="toastMsg">Saved</span></div>
+
+<!-- ═══ ADD MEMBER MODAL ═══ -->
+<div class="modal-bg" id="addMemberModal">
+  <div class="modal">
+    <div class="modal-title">Add Team Member</div>
+    <div class="field">
+      <label>Discord User ID</label>
+      <input type="text" id="newMemberID" placeholder="e.g. 332059572523237386" style="font-family:var(--FM)" />
+      <div class="hint">Enable Developer Mode in Discord → right-click any user → Copy User ID</div>
+    </div>
+    <div class="field">
+      <label>Role</label>
+      <select id="newMemberRole">
+        <option value="moderator">Moderator — form submissions only</option>
+        <option value="admin">Admin — full content access</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:16px;justify-content:flex-end;">
+      <button class="btn btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-sm btn-p" onclick="addMember()">Add Member</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+//  CONFIG
+// ══════════════════════════════════════════
+const API = ''; // Same origin — server serves this file
+
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+let state = {
+  content:  {},
+  settings: {},
+  features: [],
+  faqs:     [],
+  sections: [],
+  dirty: false,
+};
+
+const DEFAULT_SECTIONS = [
+  { id:'hero',       name:'Hero',            enabled:true },
+  { id:'about',      name:'About',           enabled:true },
+  { id:'features',   name:'Features',        enabled:true },
+  { id:'how',        name:'How It Works',    enabled:true },
+  { id:'experience', name:'Experience',      enabled:true },
+  { id:'why',        name:'Why Join',        enabled:true },
+  { id:'rules',      name:'Community Rules', enabled:true },
+  { id:'faq',        name:'FAQ',             enabled:true },
+  { id:'cta',        name:'Final CTA',       enabled:true },
+];
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+async function init() {
+  await loadCurrentUser();
+  await Promise.all([loadContent(), loadSettings(), loadAnalyticsSummary(), loadSubmissionCounts()]);
+  bindColorPickers();
+}
+
+// ══════════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════════
+async function loadCurrentUser() {
+  try {
+    const res = await api('/auth/me');
+    if (!res.authenticated) {
+      window.location.href = '/auth/discord';
+      return;
+    }
+    const u = res.user;
+    const av = document.getElementById('sidebarAvatar');
+    if (u.avatar) {
+      av.innerHTML = `<img src="${u.avatar}" alt="${u.display_name}" />`;
+    } else {
+      av.textContent = (u.display_name || u.username || '?')[0].toUpperCase();
+    }
+    document.getElementById('sidebarName').textContent = u.display_name || u.username;
+    document.getElementById('sidebarRole').textContent = u.role.charAt(0).toUpperCase() + u.role.slice(1) + ' · Discord OAuth';
+  } catch (e) {
+    window.location.href = '/auth/discord';
+  }
+}
+
+async function logout() {
+  await api('/auth/logout', 'POST');
+  window.location.href = '/auth/discord';
+}
+
+// ══════════════════════════════════════════
+//  API HELPER
+// ══════════════════════════════════════════
+async function api(path, method = 'GET', body = null) {
+  const opts = { method, credentials: 'include', headers: {} };
+  if (body) { opts.headers['Content-Type'] = 'application/json'; opts.body = JSON.stringify(body); }
+  const res = await fetch(API + path, opts);
+  if (!res.ok) throw new Error(`API ${path} → ${res.status}`);
+  return res.json();
+}
+
+// ══════════════════════════════════════════
+//  CONTENT
+// ══════════════════════════════════════════
+async function loadContent() {
+  try {
+    const data = await api('/api/content');
+    state.content = data;
+
+    // Populate text fields
+    for (const [k, v] of Object.entries(data)) {
+      const el = document.getElementById('f-' + k);
+      if (el) el.value = v;
+    }
+
+    // Features & FAQ are JSON
+    if (data.features_cards)  { state.features = JSON.parse(data.features_cards); renderFeatures(); }
+    if (data.faq_items)        { state.faqs     = JSON.parse(data.faq_items);      renderFaqs(); }
+  } catch (e) {
+    console.error('loadContent:', e);
+  }
+}
+
+async function saveContent() {
+  const keys = [
+    'hero_eyebrow','hero_title','hero_subtitle','hero_tagline','hero_cta1_text','hero_cta2_text',
+    'hero_stat1_val','hero_stat1_label','hero_stat2_val','hero_stat2_label',
+    'hero_stat3_val','hero_stat3_label','hero_stat4_val','hero_stat4_label',
+    'about_label','about_heading1','about_heading2','about_sub','about_body','about_pills',
+    'features_label','features_heading','features_sub',
+    'faq_label','faq_heading',
+    'cta_label','cta_heading','cta_desc','cta_btn1_text','cta_btn2_text','cta_btn3_text',
+    'nav_cta_text','footer_copy',
+  ];
+
+  const updates = {};
+  keys.forEach(k => {
+    const el = document.getElementById('f-' + k);
+    if (el) updates[k] = el.value;
+  });
+
+  // Include features & faq JSON
+  updates.features_cards = JSON.stringify(state.features);
+  updates.faq_items      = JSON.stringify(state.faqs);
+
+  try {
+    await api('/api/content', 'POST', updates);
+    toast('✓ Content saved');
+    markClean();
+  } catch (e) {
+    toast('✗ Save failed — ' + e.message);
+  }
+}
+
+// ══════════════════════════════════════════
+//  SETTINGS
+// ══════════════════════════════════════════
+async function loadSettings() {
+  try {
+    const data = await api('/api/settings');
+    state.settings = data;
+
+    // Text/URL fields
+    ['discord_invite','topgg_server_id','tiktok_url','discord_webhook_url'].forEach(k => {
+      const el = document.getElementById('f-' + k);
+      if (el && data[k]) el.value = data[k];
+    });
+
+    // Toggles
+    ['show_topgg_widget','show_member_count','show_discord_widget','webhook_enabled'].forEach(k => {
+      const el = document.getElementById('f-' + k);
+      if (el) el.checked = data[k] === 'true';
+    });
+
+    // Colors
+    ['accent_color','accent_light'].forEach(k => {
+      const picker = document.getElementById('f-' + k);
+      const hex    = document.getElementById('f-' + k + '_hex');
+      if (picker && data[k]) picker.value = data[k];
+      if (hex    && data[k]) hex.value    = data[k];
+    });
+
+    // Sections
+    const order    = data.section_order   ? JSON.parse(data.section_order)   : DEFAULT_SECTIONS.map(s => s.id);
+    const disabled = data.sections_disabled ? JSON.parse(data.sections_disabled) : [];
+    state.sections = order.map(id => {
+      const def = DEFAULT_SECTIONS.find(s => s.id === id) || { id, name: id };
+      return { ...def, enabled: !disabled.includes(id) };
+    });
+    renderSections();
+
+    // Webhook status indicator
+    if (data.discord_webhook_url && data.webhook_enabled === 'true') {
+      document.getElementById('webhookStatus').className = 'sb2 on';
+      document.getElementById('webhookStatus').textContent = 'Active';
+    }
+  } catch (e) {
+    console.error('loadSettings:', e);
+  }
+}
+
+async function saveBranding() {
+  const updates = {};
+  ['accent_color','accent_light'].forEach(k => {
+    const hex = document.getElementById('f-' + k + '_hex');
+    if (hex) updates[k] = hex.value;
+  });
+  ['show_topgg_widget','show_member_count','show_discord_widget'].forEach(k => {
+    const el = document.getElementById('f-' + k);
+    if (el) updates[k] = String(el.checked);
+  });
+  try {
+    await api('/api/settings', 'POST', updates);
+    toast('✓ Theme saved');
+  } catch (e) { toast('✗ ' + e.message); }
+}
+
+async function saveDiscord() {
+  const updates = {};
+  ['discord_invite','topgg_server_id','tiktok_url','discord_webhook_url'].forEach(k => {
+    const el = document.getElementById('f-' + k);
+    if (el) updates[k] = el.value;
+  });
+  ['webhook_enabled'].forEach(k => {
+    const el = document.getElementById('f-' + k);
+    if (el) updates[k] = String(el.checked);
+  });
+  try {
+    await api('/api/settings', 'POST', updates);
+    toast('✓ Discord settings saved');
+  } catch (e) { toast('✗ ' + e.message); }
+}
+
+async function saveSections() {
+  const order    = state.sections.map(s => s.id);
+  const disabled = state.sections.filter(s => !s.enabled).map(s => s.id);
+  try {
+    await api('/api/settings', 'POST', {
+      section_order:    JSON.stringify(order),
+      sections_disabled: JSON.stringify(disabled),
+    });
+    toast('✓ Section order saved');
+    markClean();
+  } catch (e) { toast('✗ ' + e.message); }
+}
+
+async function saveAll() {
+  await saveContent();
+  await saveBranding();
+  await saveDiscord();
+}
+
+// ══════════════════════════════════════════
+//  FEATURES
+// ══════════════════════════════════════════
+function renderFeatures() {
+  const el = document.getElementById('featureCards');
+  if (!el) return;
+  el.innerHTML = state.features.map((f, i) => `
+    <div class="card mb12">
+      <div class="row jb gap8 mb12">
+        <div class="row gap8">
+          <input type="text" value="${esc(f.icon)}" style="width:48px;text-align:center;" oninput="state.features[${i}].icon=this.value;markDirty()" />
+          <span class="text-mono text-dim" style="font-size:11px;">#${String(i+1).padStart(2,'0')}</span>
+        </div>
+        <button class="btn btn-xs btn-d" onclick="removeFeature(${i})">Remove</button>
+      </div>
+      <div class="fr">
+        <div class="field"><label>Title</label><input type="text" value="${esc(f.title)}" oninput="state.features[${i}].title=this.value;markDirty()" /></div>
+        <div class="field"><label>Description</label><input type="text" value="${esc(f.desc)}" oninput="state.features[${i}].desc=this.value;markDirty()" /></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function addFeature() {
+  state.features.push({ icon:'✨', title:'New Feature', desc:'Describe this feature.' });
+  renderFeatures(); markDirty();
+}
+function removeFeature(i) { state.features.splice(i,1); renderFeatures(); markDirty(); }
+
+// ══════════════════════════════════════════
+//  FAQ
+// ══════════════════════════════════════════
+function renderFaqs() {
+  const el = document.getElementById('faqCards');
+  if (!el) return;
+  el.innerHTML = state.faqs.map((f, i) => `
+    <div class="card mb12">
+      <div class="row jb gap8 mb12">
+        <span class="text-muted" style="font-size:12px;">Q${i+1}</span>
+        <button class="btn btn-xs btn-d" onclick="removeFaq(${i})">Remove</button>
+      </div>
+      <div class="field"><label>Question</label><input type="text" value="${esc(f.q)}" oninput="state.faqs[${i}].q=this.value;markDirty()" /></div>
+      <div class="field"><label>Answer</label><textarea rows="2" oninput="state.faqs[${i}].a=this.value;markDirty()">${esc(f.a)}</textarea></div>
+    </div>
+  `).join('');
+}
+
+function addFaq() { state.faqs.push({ q:'New question?', a:'Answer here.' }); renderFaqs(); markDirty(); }
+function removeFaq(i) { state.faqs.splice(i,1); renderFaqs(); markDirty(); }
+
+// ══════════════════════════════════════════
+//  SECTIONS
+// ══════════════════════════════════════════
+function renderSections() {
+  const el = document.getElementById('sectionList');
+  if (!el) return;
+  el.innerHTML = state.sections.map((s, i) => `
+    <div class="trow" style="padding:12px 0;">
+      <span style="color:var(--dim);margin-right:12px;cursor:grab;">⠿</span>
+      <div class="tinfo">
+        <div class="tlabel">${s.name}</div>
+        <div class="tdesc text-mono" style="font-size:11px;">#${s.id}</div>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" ${s.enabled?'checked':''} onchange="state.sections[${i}].enabled=this.checked;markDirty()" />
+        <span class="trk"></span>
+      </label>
+    </div>
+  `).join('');
+}
+
+// ══════════════════════════════════════════
+//  SUBMISSIONS
+// ══════════════════════════════════════════
+async function loadSubmissionCounts() {
+  try {
+    const data = await api('/api/submissions');
+    let totalUnread = 0;
+    data.counts.forEach(c => {
+      const el = document.getElementById('fc-' + c.form_type);
+      if (el) el.textContent = c.total;
+      totalUnread += c.unread;
+    });
+    const badge = document.getElementById('unreadBadge');
+    if (badge) badge.textContent = totalUnread;
+    document.getElementById('ov-forms').textContent = data.counts.reduce((a,c) => a + c.total, 0);
+  } catch (e) { console.error('loadSubmissionCounts:', e); }
+}
+
+async function loadSubmissions(type, btn) {
+  if (btn) {
+    document.querySelectorAll('#view-forms .tab').forEach(t => t.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  const el = document.getElementById('submissionsTable');
+  el.innerHTML = '<div class="loading"><div class="spin"></div> Loading…</div>';
+  try {
+    const data = await api(`/api/submissions?type=${type}`);
+    const subs = data.submissions;
+    if (!subs.length) { el.innerHTML = '<div class="loading text-dim">No submissions yet.</div>'; return; }
+
+    const statusTag = s => {
+      const m = { new:'g', read:'', reviewed:'b', approved:'g', denied:'r', archived:'' };
+      return `<span class="tag ${m[s]||''}">${s}</span>`;
+    };
+
+    el.innerHTML = `<table>
+      <thead><tr>
+        <th>Date</th><th>Name / User</th><th>Discord</th><th>Subject / Type</th><th>Status</th><th>Actions</th>
+      </tr></thead>
+      <tbody>
+        ${subs.map(s => `<tr>
+          <td class="text-dim" style="font-size:11.5px;">${new Date(s.submitted_at).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'})}</td>
+          <td style="font-weight:500;">${esc(s.data.name || s.data.username || '—')}</td>
+          <td class="text-mono text-muted" style="font-size:11.5px;">${esc(s.data.discord || s.data.discord_id || '—')}</td>
+          <td>${esc(s.data.subject || s.data.role || s.data.reason || type)}</td>
+          <td>${statusTag(s.status)}</td>
+          <td>
+            <div class="row gap8">
+              <button class="btn btn-xs" onclick="markRead(${s.id})">Mark Read</button>
+              <button class="btn btn-xs btn-d" onclick="deleteSubmission(${s.id})">Delete</button>
+            </div>
+          </td>
+        </tr>`).join('')}
+      </tbody>
+    </table>`;
+  } catch (e) {
+    el.innerHTML = '<div class="loading text-dim">Failed to load submissions.</div>';
+  }
+}
+
+async function markRead(id) {
+  try { await api(`/api/submissions/${id}`, 'PATCH', { status: 'read' }); loadSubmissions(currentFormType()); toast('Marked as read'); }
+  catch (e) { toast('✗ ' + e.message); }
+}
+
+async function deleteSubmission(id) {
+  if (!confirm('Delete this submission? This cannot be undone.')) return;
+  try { await api(`/api/submissions/${id}`, 'DELETE'); loadSubmissions(currentFormType()); toast('Deleted'); }
+  catch (e) { toast('✗ ' + e.message); }
+}
+
+function currentFormType() {
+  const active = document.querySelector('#view-forms .tab.active');
+  const map = { 'Contact':'contact', 'Staff Application':'staff', 'Ban Appeal':'ban' };
+  return active ? (map[active.textContent.trim()] || 'contact') : 'contact';
+}
+
+// ══════════════════════════════════════════
+//  ANALYTICS
+// ══════════════════════════════════════════
+async function loadAnalyticsSummary() {
+  try {
+    const data = await api('/api/analytics/summary');
+    document.getElementById('ov-views').textContent    = data.page_views.toLocaleString();
+    document.getElementById('ov-visitors').textContent = data.unique_visitors.toLocaleString();
+    document.getElementById('ov-cta').textContent      = data.cta_clicks.reduce((a,c) => a + c.count, 0).toLocaleString();
+
+    // Analytics page
+    document.getElementById('an-views').textContent    = data.page_views.toLocaleString();
+    document.getElementById('an-visitors').textContent = data.unique_visitors.toLocaleString();
+    document.getElementById('an-cta').textContent      = data.cta_clicks.reduce((a,c) => a + c.count, 0).toLocaleString();
+    document.getElementById('an-forms').textContent    = data.form_submissions.reduce((a,c) => a + c.count, 0).toLocaleString();
+
+    // CTA bars
+    const maxCta = Math.max(...data.cta_clicks.map(c => c.count), 1);
+    document.getElementById('an-ctaBars').innerHTML = data.cta_clicks.length
+      ? data.cta_clicks.map(c => `<div class="bar-row"><span class="bar-lbl">${esc(c.meta||'—')}</span><div class="bar-tr"><div class="bar-f" style="width:${Math.round(c.count/maxCta*100)}%"></div></div><span class="bar-v">${c.count}</span></div>`).join('')
+      : '<div class="text-dim" style="font-size:12px;padding:8px 0;">No data yet</div>';
+
+    // Referrer bars
+    const maxRef = Math.max(...data.referrers.map(r => r.count), 1);
+    document.getElementById('an-refBars').innerHTML = data.referrers.length
+      ? data.referrers.map(r => { const meta = (() => { try { return JSON.parse(r.meta)?.ref || r.meta; } catch { return r.meta || 'Direct'; } })(); return `<div class="bar-row"><span class="bar-lbl">${esc(meta)}</span><div class="bar-tr"><div class="bar-f" style="width:${Math.round(r.count/maxRef*100)}%"></div></div><span class="bar-v">${r.count}</span></div>`; }).join('')
+      : '<div class="text-dim" style="font-size:12px;padding:8px 0;">No data yet</div>';
+  } catch (e) { console.error('loadAnalyticsSummary:', e); }
+}
+
+// ══════════════════════════════════════════
+//  TEAM
+// ══════════════════════════════════════════
+async function loadTeam() {
+  const el = document.getElementById('teamTable');
+  el.innerHTML = '<div class="loading"><div class="spin"></div> Loading team…</div>';
+  try {
+    const members = await api('/api/team');
+    const roleTag = r => `<span class="tag role-${r}">${r.charAt(0).toUpperCase()+r.slice(1)}</span>`;
+    el.innerHTML = `<table>
+      <thead><tr><th>Member</th><th>Discord ID</th><th>Role</th><th>Added</th><th>Last Login</th><th>Actions</th></tr></thead>
+      <tbody>
+        ${members.map(m => `<tr>
+          <td>
+            <div class="row gap12">
+              <div class="t-av">${m.avatar_url ? `<img src="${m.avatar_url}" alt="" />` : (m.display_name||m.username||'?')[0].toUpperCase()}</div>
+              <div>
+                <div style="font-weight:500;font-size:13px;">${esc(m.display_name||m.username)}</div>
+                <div class="text-dim" style="font-size:11px;">@${esc(m.username)}</div>
+              </div>
+            </div>
+          </td>
+          <td class="text-mono text-dim" style="font-size:11.5px;">${m.discord_id}</td>
+          <td>${roleTag(m.role)}</td>
+          <td class="text-dim" style="font-size:11.5px;">${m.added_at ? new Date(m.added_at).toLocaleDateString() : '—'}</td>
+          <td class="text-dim" style="font-size:11.5px;">${m.last_login ? new Date(m.last_login).toLocaleDateString() : 'Never'}</td>
+          <td>
+            ${m.is_owner ? '<span class="text-dim" style="font-size:11px;">Owner</span>' : `
+              <div class="row gap8">
+                <select style="width:auto;padding:4px 8px;font-size:11.5px;" onchange="changeRole('${m.discord_id}',this.value)">
+                  <option ${m.role==='moderator'?'selected':''} value="moderator">Moderator</option>
+                  <option ${m.role==='admin'?'selected':''} value="admin">Admin</option>
+                </select>
+                <button class="btn btn-xs btn-d" onclick="removeMember('${m.discord_id}','${esc(m.display_name||m.username)}')">Remove</button>
+              </div>
+            `}
+          </td>
+        </tr>`).join('')}
+      </tbody>
+    </table>`;
+  } catch (e) {
+    el.innerHTML = '<div class="loading text-dim">Failed to load team.</div>';
+    console.error('loadTeam:', e);
+  }
+}
+
+function openAddMember() { document.getElementById('addMemberModal').classList.add('open'); }
+function closeModal() { document.getElementById('addMemberModal').classList.remove('open'); }
+
+async function addMember() {
+  const discord_id = document.getElementById('newMemberID').value.trim();
+  const role       = document.getElementById('newMemberRole').value;
+  if (!discord_id) { toast('✗ Discord User ID is required'); return; }
+  try {
+    await api('/api/team', 'POST', { discord_id, role });
+    toast('✓ Team member added');
+    closeModal();
+    document.getElementById('newMemberID').value = '';
+    loadTeam();
+  } catch (e) { toast('✗ ' + e.message); }
+}
+
+async function changeRole(discord_id, role) {
+  try {
+    await api(`/api/team/${discord_id}`, 'PATCH', { role });
+    toast(`✓ Role updated to ${role}`);
+  } catch (e) { toast('✗ ' + e.message); }
+}
+
+async function removeMember(discord_id, name) {
+  if (!confirm(`Remove ${name} from the team? They will lose dashboard access immediately.`)) return;
+  try {
+    await api(`/api/team/${discord_id}`, 'DELETE');
+    toast('✓ Member removed');
+    loadTeam();
+  } catch (e) { toast('✗ ' + e.message); }
+}
+
+// ══════════════════════════════════════════
+//  COLOR PICKERS
+// ══════════════════════════════════════════
+function bindColorPickers() {
+  ['accent_color','accent_light'].forEach(k => {
+    const picker = document.getElementById('f-' + k);
+    const hex    = document.getElementById('f-' + k + '_hex');
+    if (picker && hex) {
+      picker.addEventListener('input', () => { hex.value = picker.value; markDirty(); });
+    }
+  });
+}
+
+function syncHex(k) {
+  const hex = document.getElementById('f-' + k + '_hex').value;
+  const picker = document.getElementById('f-' + k);
+  if (picker && /^#[0-9a-f]{6}$/i.test(hex)) picker.value = hex;
+  markDirty();
+}
+
+// ══════════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════════
+function nav(view, el) {
+  document.querySelectorAll('.ni').forEach(n => n.classList.remove('active'));
+  if (el) el.classList.add('active');
+  else {
+    // find the button that navigates to this view
+    document.querySelectorAll('.ni').forEach(n => {
+      if (n.getAttribute('onclick')?.includes(`'${view}'`)) n.classList.add('active');
+    });
+  }
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  const labels = { overview:'Overview', content:'Content Editor', branding:'Branding & Theme', sections:'Section Manager', discord:'Discord Settings', forms:'Forms & Submissions', analytics:'Analytics', team:'Team & Admins' };
+  document.getElementById('crumb').textContent = labels[view] || view;
+  if (view === 'team') loadTeam();
+  if (view === 'forms') loadSubmissions('contact');
+  if (view === 'analytics') loadAnalyticsSummary();
+}
+
+// ══════════════════════════════════════════
+//  CONTENT TABS
+// ══════════════════════════════════════════
+function cTab(tab, btn) {
+  ['hero','about','features','faq','cta'].forEach(t => {
+    document.getElementById('ct-' + t).style.display = t === tab ? '' : 'none';
+  });
+  document.querySelectorAll('#cTabs .tab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
+
+// ══════════════════════════════════════════
+//  DIRTY / TOAST
+// ══════════════════════════════════════════
+function markDirty() { state.dirty = true; document.getElementById('saveBar').classList.remove('hidden'); }
+function markClean() { state.dirty = false; document.getElementById('saveBar').classList.add('hidden'); }
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ══════════════════════════════════════════
+//  UTIL
+// ══════════════════════════════════════════
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// Close modal on backdrop click
+document.getElementById('addMemberModal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+init();
+</script>
+</body>
+</html>
