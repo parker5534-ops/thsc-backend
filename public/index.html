@@ -532,42 +532,267 @@
 }
 </style>
 
-  <h2>Discord Server Overview</h2>
-  <div style="display:flex; gap:20px; flex-wrap:wrap;">
+  <style>
+.discord-overview-card {
+  margin-bottom: 24px;
+  padding: 24px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, rgba(20, 20, 28, 0.98) 0%, rgba(14, 14, 20, 0.98) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.16);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+}
 
-    
-    <div class="stat-box">
-      <strong>Server</strong>
-      <div id="guild_name">Loading...</div>
+.discord-overview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.discord-overview-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.discord-guild-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  object-fit: cover;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+}
+
+.discord-overview-eyebrow {
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 4px;
+}
+
+.discord-overview-title {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #fff;
+  margin: 0;
+}
+
+.discord-overview-subtitle {
+  margin: 4px 0 0;
+  color: rgba(255,255,255,0.62);
+  font-size: 14px;
+}
+
+.discord-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.22);
+  color: #86efac;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.discord-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #22c55e;
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.7);
+}
+
+.discord-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.discord-stat-tile {
+  position: relative;
+  overflow: hidden;
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.06);
+  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
+}
+
+.discord-stat-tile:hover {
+  transform: translateY(-2px);
+  border-color: rgba(139, 92, 246, 0.28);
+  background: rgba(255,255,255,0.04);
+}
+
+.discord-stat-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 10px;
+}
+
+.discord-stat-value {
+  font-size: 32px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: #fff;
+}
+
+.discord-stat-sub {
+  margin-top: 8px;
+  font-size: 13px;
+  color: rgba(255,255,255,0.54);
+}
+
+.discord-meta-row {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 14px;
+  margin-top: 14px;
+}
+
+.discord-meta-card {
+  padding: 18px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.025);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.discord-meta-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.45);
+  margin-bottom: 8px;
+}
+
+.discord-meta-value {
+  font-size: 15px;
+  color: #fff;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+.discord-meta-muted {
+  color: rgba(255,255,255,0.58);
+  font-weight: 500;
+}
+
+@media (max-width: 1200px) {
+  .discord-stat-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .discord-meta-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px) {
+  .discord-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .discord-overview-title {
+    font-size: 22px;
+  }
+
+  .discord-stat-value {
+    font-size: 26px;
+  }
+}
+</style>
+
+<section class="discord-overview-card">
+  <div class="discord-overview-header">
+    <div class="discord-overview-title-wrap">
+      <img id="guild_icon" class="discord-guild-icon" src="" alt="Server icon" style="display:none;" />
+      <div>
+        <div class="discord-overview-eyebrow">Discord Intelligence</div>
+        <h2 class="discord-overview-title">Server Overview</h2>
+        <p class="discord-overview-subtitle">Live server stats powered by BlazeBot.</p>
+      </div>
     </div>
 
-    <div class="stat-box">
-      <strong>Members</strong>
-      <div id="member_count">Loading...</div>
+    <div class="discord-status-pill">
+      <span class="discord-status-dot"></span>
+      <span id="discord_connection_status">Connected</span>
     </div>
-
-    <div class="stat-box">
-      <strong>Online</strong>
-      <div id="online_count">Loading...</div>
-    </div>
-
-    <div class="stat-box">
-      <strong>Channels</strong>
-      <div id="total_channels">Loading...</div>
-    </div>
-
-    <div class="stat-box">
-      <strong>Roles</strong>
-      <div id="total_roles">Loading...</div>
-    </div>
-
-    <div class="stat-box">
-      <strong>Boosts</strong>
-      <div id="boost_count">Loading...</div>
-    </div>
-
   </div>
-</div>
+
+  <div class="discord-stat-grid">
+    <div class="discord-stat-tile">
+      <div class="discord-stat-label">Members</div>
+      <div class="discord-stat-value" id="member_count">—</div>
+      <div class="discord-stat-sub">Total in server</div>
+    </div>
+
+    <div class="discord-stat-tile">
+      <div class="discord-stat-label">Online</div>
+      <div class="discord-stat-value" id="online_count">—</div>
+      <div class="discord-stat-sub">Currently active</div>
+    </div>
+
+    <div class="discord-stat-tile">
+      <div class="discord-stat-label">Channels</div>
+      <div class="discord-stat-value" id="total_channels">—</div>
+      <div class="discord-stat-sub">Text + voice</div>
+    </div>
+
+    <div class="discord-stat-tile">
+      <div class="discord-stat-label">Roles</div>
+      <div class="discord-stat-value" id="total_roles">—</div>
+      <div class="discord-stat-sub">Configured roles</div>
+    </div>
+
+    <div class="discord-stat-tile">
+      <div class="discord-stat-label">Boosts</div>
+      <div class="discord-stat-value" id="boost_count">—</div>
+      <div class="discord-stat-sub">Server boosts</div>
+    </div>
+
+    <div class="discord-stat-tile">
+      <div class="discord-stat-label">Boost Level</div>
+      <div class="discord-stat-value" id="boost_level">—</div>
+      <div class="discord-stat-sub">Current tier</div>
+    </div>
+  </div>
+
+  <div class="discord-meta-row">
+    <div class="discord-meta-card">
+      <div class="discord-meta-label">Server</div>
+      <div class="discord-meta-value" id="guild_name">Loading...</div>
+      <div class="discord-meta-value discord-meta-muted" id="guild_description" style="margin-top:8px;">—</div>
+    </div>
+
+    <div class="discord-meta-card">
+      <div class="discord-meta-label">Channel Breakdown</div>
+      <div class="discord-meta-value">
+        Text: <span id="text_channels">—</span>
+      </div>
+      <div class="discord-meta-value discord-meta-muted" style="margin-top:8px;">
+        Voice: <span id="voice_channels">—</span>
+      </div>
+    </div>
+
+    <div class="discord-meta-card">
+      <div class="discord-meta-label">Last Sync</div>
+      <div class="discord-meta-value" id="fetched_at">—</div>
+      <div class="discord-meta-value discord-meta-muted" style="margin-top:8px;">
+        Guild ID: <span id="guild_id">—</span>
+      </div>
+    </div>
+  </div>
+</section>
 
     <!-- ═══ TEAM ═══ -->
     <div class="view" id="view-team">
@@ -1210,15 +1435,32 @@ async function loadDiscordSummary() {
     const res = await fetch('/api/discord/summary');
     const data = await res.json();
 
+    document.getElementById('discord_connection_status').textContent = data.bot_connected ? 'Connected' : 'Disconnected';
     document.getElementById('guild_name').textContent = data.guild_name ?? '—';
+    document.getElementById('guild_description').textContent = data.guild_description ?? 'No description set';
     document.getElementById('member_count').textContent = data.member_count ?? '—';
     document.getElementById('online_count').textContent = data.online_count ?? '—';
     document.getElementById('total_channels').textContent = data.total_channels ?? '—';
+    document.getElementById('text_channels').textContent = data.text_channels ?? '—';
+    document.getElementById('voice_channels').textContent = data.voice_channels ?? '—';
     document.getElementById('total_roles').textContent = data.total_roles ?? '—';
     document.getElementById('boost_count').textContent = data.boost_count ?? '—';
+    document.getElementById('boost_level').textContent = data.boost_level ?? '—';
+    document.getElementById('guild_id').textContent = data.guild_id ?? '—';
+
+    if (data.fetched_at) {
+      document.getElementById('fetched_at').textContent = new Date(data.fetched_at).toLocaleString();
+    }
+
+    const guildIcon = document.getElementById('guild_icon');
+    if (data.guild_icon) {
+      guildIcon.src = data.guild_icon;
+      guildIcon.style.display = 'block';
+    }
 
   } catch (err) {
     console.error('Failed to load Discord data:', err);
+    document.getElementById('discord_connection_status').textContent = 'Error';
   }
 }
 
