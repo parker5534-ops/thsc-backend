@@ -230,4 +230,4 @@ function getHint(name, status) {
   return 'Check your bot token, guild ID, and bot permissions.';
 }
 
-module.exports = router;
+module.exports = { getGuild, getChannels, getRoles, getMembers, getSummary, discordSafe };
