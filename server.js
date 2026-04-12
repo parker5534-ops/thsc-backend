@@ -77,6 +77,7 @@ app.use('/api/settings',    require('./routes/settings'));
 app.use('/api/team',        require('./routes/team'));
 app.use('/api/submissions', require('./routes/submissions'));
 app.use('/api/analytics',   require('./routes/analytics'));
+app.use('/api/discord',     require('./routes/discord'));
 
 // ── HEALTH CHECK ─────────────────────────────────────────
 app.get('/health', (req, res) => res.json({ ok: true, ts: Date.now() }));
@@ -91,4 +92,3 @@ app.listen(PORT, () => {
   console.log(`[THSC] Server running on port ${PORT}`);
   console.log(`[THSC] Environment: ${process.env.NODE_ENV || 'development'}`);
 });
-app.use('/api/discord', require('./routes/discord'))
