@@ -42,6 +42,16 @@ app.use(session({
   }
 }));
 
+console.log('=== OAUTH DEBUG START ===');
+console.log('NODE_ENV:', JSON.stringify(process.env.NODE_ENV));
+console.log('DISCORD_CLIENT_ID exists:', !!process.env.DISCORD_CLIENT_ID);
+console.log('DISCORD_CLIENT_ID length:', (process.env.DISCORD_CLIENT_ID || '').length);
+console.log('DISCORD_CLIENT_SECRET exists:', !!process.env.DISCORD_CLIENT_SECRET);
+console.log('DISCORD_CLIENT_SECRET length:', (process.env.DISCORD_CLIENT_SECRET || '').length);
+console.log('DISCORD_CALLBACK_URL:', JSON.stringify(process.env.DISCORD_CALLBACK_URL));
+console.log('OWNER_DISCORD_ID:', JSON.stringify(process.env.OWNER_DISCORD_ID));
+console.log('=== OAUTH DEBUG END ===');
+
 // ── PASSPORT / DISCORD OAUTH ─────────────────────────────
 passport.use(new Strategy({
   clientID:     process.env.DISCORD_CLIENT_ID,

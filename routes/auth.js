@@ -7,41 +7,59 @@ const db = require('../db/database');
 router.get('/discord', passport.authenticate('discord'));
 
 // Discord redirects here after user approves
-router.get('/discord/callback',
-  passport.authenticate('discord', { failureRedirect: '/admin/login?error=denied' }),
-  (req, res) => {
-    const user = req.user;
+router.get('/discord/callback', (req, res, next) => {
+  console.log('DISCORD CALLBACK HIT');
+  console.log('Query keys:', Object.keys(req.query || {}));
+  console.log('Has code:', !!req.query.code);
+  console.log('Has error:', !!req.query.error);
+  console.log('Query error:', req.query.error || null);
 
-    // Check if this person is allowed in
-    const OWNER_ID = process.env.OWNER_DISCORD_ID;
-    const member = db.prepare('SELECT * FROM team WHERE discord_id = ?').get(user.discord_id);
+  passport.authenticate('discord', (err, user, info) => {
+    if (err) {
+      console.error('PASSPORT AUTH ERROR:', err);
+      console.error('PASSPORT AUTH ERROR DATA:', err.oauthError?.data || null);
+      console.error('PASSPORT AUTH STATUS:', err.oauthError?.statusCode || null);
 
-    if (user.discord_id !== OWNER_ID && !member) {
-      req.logout(() => {});
-      return res.redirect('/admin/login?error=unauthorized');
+      return res.status(500).json({
+        ok: false,
+        stage: 'passport-authenticate',
+        error: err.message,
+        oauthData: err.oauthError?.data || null,
+        statusCode: err.oauthError?.statusCode || null
+      });
     }
 
-    // Update last login and avatar
-    db.prepare(`
-      INSERT INTO team (discord_id, username, display_name, avatar, role, added_by)
-      VALUES (?, ?, ?, ?, ?, ?)
-      ON CONFLICT(discord_id) DO UPDATE SET
-        username     = excluded.username,
-        display_name = excluded.display_name,
-        avatar       = excluded.avatar,
-        last_login   = CURRENT_TIMESTAMP
-    `).run(
-      user.discord_id,
-      user.username,
-      user.global_name || user.username,
-      user.avatar,
-      user.discord_id === OWNER_ID ? 'owner' : (member?.role || 'moderator'),
-      user.discord_id === OWNER_ID ? 'system' : (member?.added_by || 'system')
-    );
+    if (!user) {
+      console.error('NO USER RETURNED:', info);
+      return res.status(401).json({
+        ok: false,
+        stage: 'no-user',
+        info: info || null
+      });
+    }
 
-    res.redirect('/admin');
-  }
-);
+    req.logIn(user, (loginErr) => {
+      if (loginErr) {
+        console.error('LOGIN ERROR:', loginErr);
+        return res.status(500).json({
+          ok: false,
+          stage: 'req.logIn',
+          error: loginErr.message
+        });
+      }
+
+      const OWNER_ID = process.env.OWNER_DISCORD_ID;
+      const member = db.prepare('SELECT * FROM team WHERE discord_id = ?').get(user.discord_id);
+
+      if (user.discord_id !== OWNER_ID && !member) {
+        req.logout(() => {});
+        return res.redirect('/admin/login?error=unauthorized');
+      }
+
+      return res.redirect('/admin');
+    });
+  })(req, res, next);
+});
 
 // Current user info
 router.get('/me', (req, res) => {
