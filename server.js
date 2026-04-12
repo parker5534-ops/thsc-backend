@@ -91,3 +91,4 @@ app.listen(PORT, () => {
   console.log(`[THSC] Server running on port ${PORT}`);
   console.log(`[THSC] Environment: ${process.env.NODE_ENV || 'development'}`);
 });
+app.use('/api/discord', require('./routes/discord'))
