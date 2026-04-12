@@ -723,9 +723,12 @@
       </div>
     </div>
 
-    <div class="discord-status-pill">
-      <span class="discord-status-dot"></span>
-      <span id="discord_connection_status">Connected</span>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="discord-status-pill">
+        <span class="discord-status-dot"></span>
+        <span id="discord_connection_status">Not loaded</span>
+      </div>
+      <button id="discordRefreshBtn" class="btn btn-sm" onclick="loadDiscordSummary(true)" title="Refresh live stats">🔄 Refresh</button>
     </div>
   </div>
 
@@ -1391,6 +1394,7 @@ function nav(view, el) {
   if (view === 'team') loadTeam();
   if (view === 'forms') loadSubmissions('contact');
   if (view === 'analytics') loadAnalyticsSummary();
+  if (view === 'analytics') loadDiscordSummary();
 }
 
 // ══════════════════════════════════════════
@@ -1428,25 +1432,50 @@ document.getElementById('addMemberModal').addEventListener('click', function(e) 
 });
 
 init();
-</script>
 <script>
-async function loadDiscordSummary() {
+// ── BlazeBot / Discord Stats ──────────────────────────────
+// Fetched at most once per session automatically.
+// The admin can force a refresh with the 🔄 button.
+let discordLoaded = false;
+
+async function loadDiscordSummary(force = false) {
+  // Skip if already loaded this session and not a manual refresh
+  if (discordLoaded && !force) return;
+
+  const statusEl = document.getElementById('discord_connection_status');
+  const refreshBtn = document.getElementById('discordRefreshBtn');
+
+  statusEl.textContent = 'Loading…';
+  if (refreshBtn) { refreshBtn.disabled = true; refreshBtn.textContent = '⏳ Loading…'; }
+
   try {
     const res = await fetch('/api/discord/summary');
     const data = await res.json();
 
-    document.getElementById('discord_connection_status').textContent = data.bot_connected ? 'Connected' : 'Disconnected';
-    document.getElementById('guild_name').textContent = data.guild_name ?? '—';
-    document.getElementById('guild_description').textContent = data.guild_description ?? 'No description set';
-    document.getElementById('member_count').textContent = data.member_count ?? '—';
-    document.getElementById('online_count').textContent = data.online_count ?? '—';
-    document.getElementById('total_channels').textContent = data.total_channels ?? '—';
-    document.getElementById('text_channels').textContent = data.text_channels ?? '—';
-    document.getElementById('voice_channels').textContent = data.voice_channels ?? '—';
-    document.getElementById('total_roles').textContent = data.total_roles ?? '—';
-    document.getElementById('boost_count').textContent = data.boost_count ?? '—';
-    document.getElementById('boost_level').textContent = data.boost_level ?? '—';
-    document.getElementById('guild_id').textContent = data.guild_id ?? '—';
+    // Backend returned a structured error (e.g. bad token, bot not in server)
+    if (data.error) {
+      statusEl.textContent = 'Error';
+      console.warn('[Discord]', data.message);
+      // Show the actionable hint in the subtitle so the admin knows what to fix
+      const sub = document.querySelector('.discord-overview-subtitle');
+      if (sub) sub.textContent = data.hint || data.message;
+      return;
+    }
+
+    discordLoaded = true;
+
+    statusEl.textContent = data.bot_connected ? 'Connected' : 'Disconnected';
+    document.getElementById('guild_name').textContent         = data.guild_name         ?? '—';
+    document.getElementById('guild_description').textContent  = data.guild_description  ?? 'No description set';
+    document.getElementById('member_count').textContent       = data.member_count       ?? '—';
+    document.getElementById('online_count').textContent       = data.online_count       ?? '—';
+    document.getElementById('total_channels').textContent     = data.total_channels     ?? '—';
+    document.getElementById('text_channels').textContent      = data.text_channels      ?? '—';
+    document.getElementById('voice_channels').textContent     = data.voice_channels     ?? '—';
+    document.getElementById('total_roles').textContent        = data.total_roles        ?? '—';
+    document.getElementById('boost_count').textContent        = data.boost_count        ?? '—';
+    document.getElementById('boost_level').textContent        = data.boost_level        ?? '—';
+    document.getElementById('guild_id').textContent           = data.guild_id           ?? '—';
 
     if (data.fetched_at) {
       document.getElementById('fetched_at').textContent = new Date(data.fetched_at).toLocaleString();
@@ -1458,13 +1487,18 @@ async function loadDiscordSummary() {
       guildIcon.style.display = 'block';
     }
 
+    // Reset subtitle if it was showing an error hint
+    const sub = document.querySelector('.discord-overview-subtitle');
+    if (sub) sub.textContent = 'Live server stats powered by BlazeBot.';
+
   } catch (err) {
-    console.error('Failed to load Discord data:', err);
-    document.getElementById('discord_connection_status').textContent = 'Error';
+    console.error('[Discord] Failed to load stats:', err);
+    statusEl.textContent = 'Error';
+  } finally {
+    if (refreshBtn) { refreshBtn.disabled = false; refreshBtn.textContent = '🔄 Refresh'; }
   }
 }
 
-// loadDiscordSummary();
 </script>
 </body>
 </html>
