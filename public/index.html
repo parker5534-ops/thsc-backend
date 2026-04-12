@@ -519,6 +519,54 @@
       </div>
     </div>
 
+<div class="card" style="margin-bottom:20px;">
+  
+  .stat-box {
+  background: #111;
+  padding: 15px;
+  border-radius: 10px;
+  min-width: 150px;
+  text-align: center;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+  <h2>Discord Server Overview</h2>
+  <div style="display:flex; gap:20px; flex-wrap:wrap;">
+
+    
+    <div class="stat-box">
+      <strong>Server</strong>
+      <div id="guild_name">Loading...</div>
+    </div>
+
+    <div class="stat-box">
+      <strong>Members</strong>
+      <div id="member_count">Loading...</div>
+    </div>
+
+    <div class="stat-box">
+      <strong>Online</strong>
+      <div id="online_count">Loading...</div>
+    </div>
+
+    <div class="stat-box">
+      <strong>Channels</strong>
+      <div id="total_channels">Loading...</div>
+    </div>
+
+    <div class="stat-box">
+      <strong>Roles</strong>
+      <div id="total_roles">Loading...</div>
+    </div>
+
+    <div class="stat-box">
+      <strong>Boosts</strong>
+      <div id="boost_count">Loading...</div>
+    </div>
+
+  </div>
+</div>
+
     <!-- ═══ TEAM ═══ -->
     <div class="view" id="view-team">
       <div class="ph">
@@ -1153,6 +1201,26 @@ document.getElementById('addMemberModal').addEventListener('click', function(e) 
 });
 
 init();
+</script>
+<script>
+async function loadDiscordSummary() {
+  try {
+    const res = await fetch('/api/discord/summary');
+    const data = await res.json();
+
+    document.getElementById('guild_name').textContent = data.guild_name ?? '—';
+    document.getElementById('member_count').textContent = data.member_count ?? '—';
+    document.getElementById('online_count').textContent = data.online_count ?? '—';
+    document.getElementById('total_channels').textContent = data.total_channels ?? '—';
+    document.getElementById('total_roles').textContent = data.total_roles ?? '—';
+    document.getElementById('boost_count').textContent = data.boost_count ?? '—';
+
+  } catch (err) {
+    console.error('Failed to load Discord data:', err);
+  }
+}
+
+loadDiscordSummary();
 </script>
 </body>
 </html>
