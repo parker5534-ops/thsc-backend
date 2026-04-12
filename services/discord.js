@@ -3,7 +3,7 @@
  *
  * All Discord REST API calls go through this module.
  * Uses BlazeBot's token (DISCORD_BOT_TOKEN) to authenticate.
- * Responses are cached for 60 seconds to avoid rate limiting.
+ * Responses are cached for 10 minutes to avoid rate limiting.
  *
  * Discord API v10 docs: https://discord.com/developers/docs/reference
  */
@@ -15,7 +15,7 @@ const BASE = 'https://discord.com/api/v10';
 // ── Simple in-memory cache ────────────────────────────────
 // Key: endpoint string  Value: { data, expires }
 const cache = new Map();
-const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+const CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
 
 function getCached(key) {
   const entry = cache.get(key);
