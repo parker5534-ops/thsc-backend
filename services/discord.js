@@ -15,7 +15,7 @@ const BASE = 'https://discord.com/api/v10';
 // ── Simple in-memory cache ────────────────────────────────
 // Key: endpoint string  Value: { data, expires }
 const cache = new Map();
-const CACHE_TTL_MS = 60 * 1000; // 60 seconds
+const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
 function getCached(key) {
   const entry = cache.get(key);
