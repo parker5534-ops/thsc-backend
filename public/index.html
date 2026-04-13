@@ -42,8 +42,8 @@
   html, body { height: 100%; }
   body { background: var(--black); color: var(--white); font-family: var(--FB); font-size: 14px; line-height: 1.6; -webkit-font-smoothing: antialiased; display: flex; overflow: hidden; height: 100vh; }
 
-  /* SIDEBAR */
-  .sb { width: var(--sw); min-width: var(--sw); background: var(--charcoal); border-right: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh; overflow-y: auto; }
+  /* ── SIDEBAR ───────────────────────────── */
+  .sb { width: var(--sw); min-width: var(--sw); background: var(--charcoal); border-right: 1px solid var(--border); display: flex; flex-direction: column; height: 100vh; overflow-y: auto; transition: transform .25s ease; z-index: 100; flex-shrink: 0; }
   .sb-head { padding: 18px 14px 14px; border-bottom: 1px solid var(--border); }
   .sb-logo { display: flex; align-items: center; gap: 9px; margin-bottom: 4px; }
   .sb-icon { width: 32px; height: 32px; background: var(--purple); border-radius: 7px; display: flex; align-items: center; justify-content: center; font-family: var(--FD); font-weight: 800; font-size: 11px; color: #fff; flex-shrink: 0; }
@@ -67,19 +67,26 @@
   .u-out { margin-left: auto; background: none; border: none; color: var(--dim); cursor: pointer; font-size: 13px; transition: color .2s; padding: 2px; }
   .u-out:hover { color: var(--red); }
 
-  /* MAIN */
+  /* ── MAIN ──────────────────────────────── */
   .main { flex: 1; display: flex; flex-direction: column; min-width: 0; height: 100vh; }
-  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 24px; height: 58px; border-bottom: 1px solid var(--border); background: var(--charcoal); flex-shrink: 0; }
-  .tb-l { display: flex; align-items: center; gap: 10px; }
-  .tb-title { font-family: var(--FD); font-size: 15px; font-weight: 700; }
-  .tb-crumb { font-size: 12px; color: var(--dim); }
-  .tb-r { display: flex; align-items: center; gap: 8px; }
-  .live-dot { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); background: var(--surface2); border: 1px solid var(--border); padding: 4px 11px; border-radius: 20px; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; padding: 0 20px; height: 58px; border-bottom: 1px solid var(--border); background: var(--charcoal); flex-shrink: 0; gap: 10px; }
+  .tb-l { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .tb-title { font-family: var(--FD); font-size: 15px; font-weight: 700; white-space: nowrap; }
+  .tb-crumb { font-size: 12px; color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tb-r { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .live-dot { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); background: var(--surface2); border: 1px solid var(--border); padding: 4px 11px; border-radius: 20px; white-space: nowrap; }
   .live-dot::before { content:''; width:5px; height:5px; border-radius:50%; background: var(--green); animation: blink 2s ease-in-out infinite; }
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
   .content { flex: 1; overflow-y: auto; padding: 24px; }
 
-  /* BUTTONS */
+  /* hamburger */
+  .hamburger { display: none; background: none; border: none; color: var(--white); cursor: pointer; padding: 4px; font-size: 20px; line-height: 1; }
+
+  /* sidebar overlay backdrop */
+  .sb-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 99; }
+  .sb-backdrop.open { display: block; }
+
+  /* ── BUTTONS ───────────────────────────── */
   .btn { display: inline-flex; align-items: center; gap: 5px; padding: 7px 13px; border-radius: var(--r); font-size: 13px; font-weight: 500; cursor: pointer; border: 1px solid var(--borderH); background: var(--surface2); color: var(--white); transition: all .15s; font-family: var(--FB); white-space: nowrap; }
   .btn:hover { background: var(--surface3); }
   .btn:disabled { opacity: .4; cursor: not-allowed; }
@@ -90,16 +97,16 @@
   .btn-d { background: var(--redB); border-color: rgba(248,113,113,.25); color: var(--red); }
   .btn-s { background: var(--greenB); border-color: rgba(74,222,128,.25); color: var(--green); }
 
-  /* CARDS */
+  /* ── CARDS ─────────────────────────────── */
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 18px; }
   .ct { font-family: var(--FD); font-size: 12px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
 
-  /* GRIDS */
+  /* ── GRIDS ─────────────────────────────── */
   .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
   .g3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 14px; }
   .g4 { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
 
-  /* FORMS */
+  /* ── FORMS ─────────────────────────────── */
   .field { margin-bottom: 16px; }
   .field:last-child { margin-bottom: 0; }
   label { display: block; font-size: 11.5px; font-weight: 500; color: var(--muted); margin-bottom: 5px; }
@@ -111,7 +118,7 @@
   .hint { font-size: 11px; color: var(--dim); margin-top: 4px; }
   .fr { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
-  /* TOGGLE */
+  /* ── TOGGLE ────────────────────────────── */
   .trow { display: flex; align-items: center; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid var(--border); }
   .trow:last-child { border-bottom: none; }
   .tinfo { flex: 1; }
@@ -124,7 +131,7 @@
   .toggle input:checked + .trk { background: var(--purple); border-color: var(--purple); }
   .toggle input:checked + .trk::before { transform: translateX(17px); background: #fff; }
 
-  /* STATS */
+  /* ── STATS ─────────────────────────────── */
   .sc { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 14px 16px; }
   .slabel { font-size: 10.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 7px; }
   .sval { font-family: var(--FD); font-size: 24px; font-weight: 800; letter-spacing: -.5px; color: var(--white); margin-bottom: 5px; }
@@ -133,37 +140,37 @@
   .sch.up { background: var(--greenB); color: var(--green); }
   .sch.down { background: var(--redB); color: var(--red); }
 
-  /* STATUS BADGES */
+  /* ── STATUS BADGES ─────────────────────── */
   .sb2 { display: inline-flex; align-items: center; gap: 4px; font-size: 11px; font-weight: 500; padding: 3px 9px; border-radius: 20px; }
   .sb2::before { content:''; width:5px; height:5px; border-radius:50%; flex-shrink:0; }
   .sb2.on  { background: var(--greenB);  color: var(--green);  } .sb2.on::before  { background: var(--green); }
   .sb2.off { background: var(--redB);    color: var(--red);    } .sb2.off::before { background: var(--red); }
   .sb2.wrn { background: var(--yellowB); color: var(--yellow); } .sb2.wrn::before { background: var(--yellow); }
 
-  /* PAGE HEADER */
-  .ph { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; gap: 14px; }
+  /* ── PAGE HEADER ───────────────────────── */
+  .ph { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; gap: 14px; flex-wrap: wrap; }
   .ph h1 { font-family: var(--FD); font-size: 20px; font-weight: 800; letter-spacing: -.02em; line-height: 1.2; margin-bottom: 3px; }
   .ph p { font-size: 12.5px; color: var(--muted); }
   .ph-a { display: flex; gap: 7px; flex-shrink: 0; }
 
-  /* TABS */
-  .tabs { display: flex; gap: 3px; margin-bottom: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 3px; width: fit-content; }
+  /* ── TABS ──────────────────────────────── */
+  .tabs { display: flex; gap: 3px; margin-bottom: 16px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 3px; width: fit-content; flex-wrap: wrap; }
   .tab { padding: 5px 13px; border-radius: 5px; border: none; background: none; font-size: 12.5px; font-weight: 500; color: var(--muted); cursor: pointer; transition: all .15s; font-family: var(--FB); }
   .tab:hover { color: var(--white); }
   .tab.active { background: var(--surface3); color: var(--white); }
 
-  /* VIEWS */
+  /* ── VIEWS ─────────────────────────────── */
   .view { display: none; }
   .view.active { display: block; }
 
-  /* TABLE */
+  /* ── TABLE ─────────────────────────────── */
   table { width: 100%; border-collapse: collapse; }
   th { font-size: 10.5px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); }
   td { padding: 10px 12px; font-size: 13px; border-bottom: 1px solid var(--border); vertical-align: middle; }
   tr:last-child td { border-bottom: none; }
   tr:hover td { background: rgba(255,255,255,.015); }
 
-  /* TAGS */
+  /* ── TAGS ──────────────────────────────── */
   .tag { display: inline-flex; align-items: center; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 20px; background: var(--surface3); color: var(--muted); border: 1px solid var(--border); }
   .tag.g { background: var(--greenB);  color: var(--green);  border-color: rgba(74,222,128,.25); }
   .tag.r { background: var(--redB);    color: var(--red);    border-color: rgba(248,113,113,.25); }
@@ -171,25 +178,25 @@
   .tag.p { background: var(--purpleG); color: var(--purpleL); border-color: rgba(124,92,191,.25); }
   .tag.b { background: var(--blueB);   color: var(--blue);   border-color: rgba(96,165,250,.25); }
 
-  /* BARS */
+  /* ── BARS ──────────────────────────────── */
   .bar-row { display: flex; align-items: center; gap: 9px; margin-bottom: 9px; }
   .bar-lbl { font-size: 12px; color: var(--muted); width: 130px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .bar-tr { flex: 1; height: 5px; background: var(--surface3); border-radius: 100px; overflow: hidden; }
   .bar-f { height: 100%; border-radius: 100px; background: var(--purple); }
   .bar-v { font-family: var(--FM); font-size: 11px; color: var(--muted); min-width: 36px; text-align: right; }
 
-  /* UPLOAD ZONE */
+  /* ── UPLOAD ZONE ───────────────────────── */
   .uzone { border: 1.5px dashed var(--borderH); border-radius: var(--r); padding: 20px; text-align: center; cursor: pointer; transition: all .2s; background: var(--surface2); }
   .uzone:hover { border-color: var(--purple); background: var(--purpleG); }
   .uzone-icon { font-size: 26px; margin-bottom: 6px; }
   .uzone-lbl { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
   .uzone-hint { font-size: 11px; color: var(--dim); }
 
-  /* TEAM AVATAR */
+  /* ── TEAM AVATAR ───────────────────────── */
   .t-av { width: 34px; height: 34px; border-radius: 50%; overflow: hidden; background: var(--purple); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; flex-shrink: 0; }
   .t-av img { width: 100%; height: 100%; object-fit: cover; }
 
-  /* MISC */
+  /* ── MISC UTILITIES ─────────────────────── */
   .row { display: flex; align-items: center; }
   .gap8 { gap: 8px; } .gap12 { gap: 12px; } .gap16 { gap: 16px; }
   .jb { justify-content: space-between; }
@@ -203,40 +210,125 @@
   .text-r { color: var(--red); }
   .divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
 
-  /* SAVE BAR */
+  /* ── ROLE BADGE COLORS ─────────────────── */
+  .role-owner { background: rgba(251,191,36,.15); color: var(--yellow); border: 1px solid rgba(251,191,36,.25); }
+  .role-admin { background: var(--purpleG); color: var(--purpleL); border: 1px solid rgba(124,92,191,.25); }
+  .role-moderator { background: var(--blueB); color: var(--blue); border: 1px solid rgba(96,165,250,.25); }
+
+  /* ── SAVE BAR ──────────────────────────── */
   .save-bar { position: fixed; bottom: 0; left: var(--sw); right: 0; background: var(--charcoal); border-top: 1px solid var(--border); padding: 11px 24px; display: flex; align-items: center; justify-content: space-between; z-index: 50; transition: transform .3s; }
   .save-bar.hidden { transform: translateY(100%); }
   .save-bar p { font-size: 12.5px; color: var(--muted); }
   .save-bar p strong { color: var(--yellow); }
 
-  /* TOAST */
+  /* ── TOAST ─────────────────────────────── */
   .toast { position: fixed; bottom: 60px; right: 20px; z-index: 100; background: var(--surface3); border: 1px solid var(--borderA); border-radius: var(--r); padding: 9px 14px; font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 7px; transform: translateY(16px); opacity: 0; transition: all .3s; pointer-events: none; }
   .toast.show { transform: none; opacity: 1; }
 
-  /* MODAL */
-  .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 200; display: none; align-items: center; justify-content: center; }
+  /* ── MODAL ─────────────────────────────── */
+  .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 200; display: none; align-items: center; justify-content: center; padding: 16px; }
   .modal-bg.open { display: flex; }
   .modal { background: var(--surface); border: 1px solid var(--borderH); border-radius: var(--rl); padding: 24px; width: 100%; max-width: 480px; }
   .modal-title { font-family: var(--FD); font-size: 16px; font-weight: 700; margin-bottom: 16px; }
 
-  /* LOADING */
+  /* ── LOADING ───────────────────────────── */
   .loading { display: flex; align-items: center; justify-content: center; padding: 48px; color: var(--dim); font-size: 13px; gap: 10px; }
   .spin { width: 16px; height: 16px; border: 2px solid var(--border); border-top-color: var(--purple); border-radius: 50%; animation: spin .7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* SCROLLBAR */
+  /* ── SCROLLBAR ─────────────────────────── */
   ::-webkit-scrollbar { width: 4px; } ::-webkit-scrollbar-track { background: transparent; } ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 10px; }
 
-  /* ROLE BADGE COLORS */
-  .role-owner { background: rgba(251,191,36,.15); color: var(--yellow); border: 1px solid rgba(251,191,36,.25); }
-  .role-admin { background: var(--purpleG); color: var(--purpleL); border: 1px solid rgba(124,92,191,.25); }
-  .role-moderator { background: var(--blueB); color: var(--blue); border: 1px solid rgba(96,165,250,.25); }
+  /* ══════════════════════════════════════════
+     DISCORD INTELLIGENCE WIDGET
+     (used only inside #view-overview and #view-analytics)
+  ══════════════════════════════════════════ */
+  .discord-overview-card {
+    margin-bottom: 24px;
+    padding: 24px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, rgba(20,20,28,.98) 0%, rgba(14,14,20,.98) 100%);
+    border: 1px solid rgba(139,92,246,.16);
+    box-shadow: 0 10px 30px rgba(0,0,0,.28);
+  }
+  .discord-overview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .discord-overview-title-wrap { display: flex; align-items: center; gap: 14px; }
+  .discord-guild-icon { width: 52px; height: 52px; border-radius: 16px; object-fit: cover; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.03); }
+  .discord-overview-eyebrow { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-bottom: 4px; }
+  .discord-overview-title { font-family: var(--FD); font-size: 24px; font-weight: 800; letter-spacing: -.03em; color: #fff; margin: 0; }
+  .discord-overview-subtitle { margin: 4px 0 0; color: rgba(255,255,255,.62); font-size: 14px; }
+  .discord-status-pill { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 999px; background: rgba(34,197,94,.12); border: 1px solid rgba(34,197,94,.22); color: #86efac; font-size: 13px; font-weight: 700; }
+  .discord-status-dot { width: 8px; height: 8px; border-radius: 999px; background: #22c55e; box-shadow: 0 0 12px rgba(34,197,94,.7); }
+  .discord-stat-grid { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 14px; }
+  .discord-stat-tile { position: relative; overflow: hidden; padding: 18px; border-radius: 18px; background: rgba(255,255,255,.025); border: 1px solid rgba(255,255,255,.06); transition: transform .18s ease, border-color .18s ease, background .18s ease; }
+  .discord-stat-tile:hover { transform: translateY(-2px); border-color: rgba(139,92,246,.28); background: rgba(255,255,255,.04); }
+  .discord-stat-label { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.45); margin-bottom: 10px; }
+  .discord-stat-value { font-family: var(--FD); font-size: 28px; line-height: 1; font-weight: 800; letter-spacing: -.04em; color: #fff; }
+  .discord-stat-sub { margin-top: 8px; font-size: 13px; color: rgba(255,255,255,.54); }
+  .discord-meta-row { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 14px; margin-top: 14px; }
+  .discord-meta-card { padding: 18px; border-radius: 18px; background: rgba(255,255,255,.025); border: 1px solid rgba(255,255,255,.06); }
+  .discord-meta-label { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.45); margin-bottom: 8px; }
+  .discord-meta-value { font-size: 15px; color: #fff; font-weight: 600; word-break: break-word; }
+  .discord-meta-muted { color: rgba(255,255,255,.58); font-weight: 500; }
+
+  /* overview compact snapshot (used in overview page only) */
+  .overview-discord-snapshot { background: var(--surface); border: 1px solid var(--border); border-radius: var(--rl); padding: 16px 18px; }
+  .snapshot-row { display: flex; flex-wrap: wrap; gap: 24px; }
+  .snapshot-item { display: flex; flex-direction: column; gap: 2px; }
+  .snapshot-label { font-size: 10.5px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+  .snapshot-value { font-family: var(--FD); font-size: 20px; font-weight: 800; }
+
+  /* ══════════════════════════════════════════
+     MOBILE RESPONSIVE
+  ══════════════════════════════════════════ */
+  @media (max-width: 768px) {
+    body { overflow: hidden; }
+    .sb { position: fixed; left: 0; top: 0; bottom: 0; transform: translateX(-100%); }
+    .sb.open { transform: translateX(0); }
+    .hamburger { display: block; }
+    .save-bar { left: 0; }
+    .content { padding: 16px; }
+    .g2, .g3, .g4 { grid-template-columns: 1fr; }
+    .fr { grid-template-columns: 1fr; }
+    .discord-stat-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .discord-meta-row { grid-template-columns: 1fr; }
+    .discord-overview-title { font-size: 20px; }
+    .discord-stat-value { font-size: 22px; }
+    .tb-title { font-size: 13px; }
+    .topbar { padding: 0 14px; }
+    .live-dot { display: none; }
+    .ph { flex-direction: column; align-items: flex-start; }
+    table { font-size: 12px; }
+    th, td { padding: 8px 10px; }
+    /* stack team table on mobile */
+    #teamTable table, #submissionsTable table { display: block; overflow-x: auto; white-space: nowrap; }
+  }
+  @media (max-width: 480px) {
+    .discord-stat-grid { grid-template-columns: 1fr 1fr; }
+    .snapshot-row { gap: 14px; }
+    .ph h1 { font-size: 17px; }
+  }
+  @media (min-width: 769px) and (max-width: 1200px) {
+    .discord-stat-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+    .discord-meta-row { grid-template-columns: 1fr; }
+    .g4 { grid-template-columns: repeat(2,1fr); }
+  }
 </style>
 </head>
 <body>
 
+<!-- ── SIDEBAR BACKDROP (mobile) ── -->
+<div class="sb-backdrop" id="sbBackdrop" onclick="closeSidebar()"></div>
+
 <!-- ═══ SIDEBAR ═══ -->
-<aside class="sb">
+<aside class="sb" id="sidebar">
   <div class="sb-head">
     <div class="sb-logo">
       <div class="sb-icon">T!H$C</div>
@@ -290,6 +382,7 @@
 <div class="main">
   <header class="topbar">
     <div class="tb-l">
+      <button class="hamburger" onclick="openSidebar()" aria-label="Open menu">☰</button>
       <div class="tb-title">T!H$C Admin</div>
       <span class="tb-crumb text-dim">/</span>
       <span class="tb-crumb" id="crumb">Overview</span>
@@ -297,45 +390,99 @@
     <div class="tb-r">
       <div class="live-dot">Live</div>
       <a href="https://thehoustonclutchers.netlify.app" target="_blank" class="btn btn-sm">↗ View Site</a>
-      <button class="btn btn-sm btn-p" onclick="saveAll()">✓ Save Changes</button>
+      <button class="btn btn-sm btn-p" onclick="saveAll()">✓ Save</button>
     </div>
   </header>
 
   <div class="content" id="mainContent">
 
-    <!-- ═══ OVERVIEW ═══ -->
+    <!-- ═══════════════════════════════════════
+         OVERVIEW
+         Components: page stats, system status,
+         quick actions, compact Discord snapshot
+    ════════════════════════════════════════ -->
     <div class="view active" id="view-overview">
       <div class="ph">
         <div><h1>Overview</h1><p>Welcome back. Here's what's happening with T!H$C.</p></div>
       </div>
-      <div class="g4 mb16" id="overviewStats">
-        <div class="sc"><div class="slabel">Page Views</div><div class="sval" id="ov-views">—</div><div class="ssub">last 30 days</div></div>
-        <div class="sc"><div class="slabel">Unique Visitors</div><div class="sval" id="ov-visitors">—</div><div class="ssub">last 30 days</div></div>
-        <div class="sc"><div class="slabel">Form Submissions</div><div class="sval" id="ov-forms">—</div><div class="ssub">total</div></div>
-        <div class="sc"><div class="slabel">CTA Clicks</div><div class="sval" id="ov-cta">—</div><div class="ssub">last 30 days</div></div>
+
+      <!-- Top-level KPI row -->
+      <div class="g4 mb16">
+        <div class="sc">
+          <div class="slabel">Page Views</div>
+          <div class="sval" id="ov-views">—</div>
+          <div class="ssub">last 30 days</div>
+        </div>
+        <div class="sc">
+          <div class="slabel">Unique Visitors</div>
+          <div class="sval" id="ov-visitors">—</div>
+          <div class="ssub">last 30 days</div>
+        </div>
+        <div class="sc">
+          <div class="slabel">Form Submissions</div>
+          <div class="sval" id="ov-forms">—</div>
+          <div class="ssub">total</div>
+        </div>
+        <div class="sc">
+          <div class="slabel">CTA Clicks</div>
+          <div class="sval" id="ov-cta">—</div>
+          <div class="ssub">last 30 days</div>
+        </div>
       </div>
-      <div class="g2">
+
+      <!-- System status + quick actions -->
+      <div class="g2 mb16">
         <div class="card">
           <div class="ct">System Status</div>
           <div class="trow"><span class="text-muted">Website</span><span class="sb2 on">Online</span></div>
-          <div class="trow"><span class="text-muted">Discord Server</span><span class="sb2 on">Connected</span></div>
-          <div class="trow"><span class="text-muted">Form submissions</span><span class="sb2 on">Receiving</span></div>
+          <div class="trow"><span class="text-muted">Discord Server</span><span class="sb2 on" id="ov-discordStatus">Connected</span></div>
+          <div class="trow"><span class="text-muted">Form Submissions</span><span class="sb2 on">Receiving</span></div>
           <div class="trow"><span class="text-muted">Discord Webhook</span><span id="webhookStatus" class="sb2 wrn">Not configured</span></div>
         </div>
         <div class="card">
           <div class="ct">Quick Actions</div>
           <div style="display:flex;flex-wrap:wrap;gap:8px;">
             <button class="btn btn-sm" onclick="nav('content',null)">✏️ Edit Content</button>
-            <button class="btn btn-sm" onclick="nav('discord',null)">🔗 Update Invite Link</button>
+            <button class="btn btn-sm" onclick="nav('discord',null)">🔗 Update Invite</button>
             <button class="btn btn-sm" onclick="nav('forms',null)">📋 View Submissions</button>
             <button class="btn btn-sm" onclick="nav('team',null)">👥 Manage Team</button>
             <button class="btn btn-sm" onclick="nav('branding',null)">🎨 Change Colors</button>
+            <button class="btn btn-sm" onclick="nav('analytics',null)">📊 Full Analytics</button>
           </div>
+        </div>
+      </div>
+
+      <!-- Compact Discord server snapshot -->
+      <div class="overview-discord-snapshot">
+        <div class="row jb mb12" style="flex-wrap:wrap;gap:10px;">
+          <div class="row gap8">
+            <img id="ov-guildIcon" src="" alt="" style="width:32px;height:32px;border-radius:8px;object-fit:cover;display:none;border:1px solid var(--border);" />
+            <div>
+              <div class="ct" style="margin-bottom:2px;">Discord Server Snapshot</div>
+              <div class="text-dim" style="font-size:11px;" id="ov-guildName">Loading…</div>
+            </div>
+          </div>
+          <div class="row gap8">
+            <span class="sb2 on" id="ov-botStatus">Bot Connected</span>
+            <button class="btn btn-xs" onclick="loadDiscordSummary(true)">🔄</button>
+          </div>
+        </div>
+        <div class="snapshot-row">
+          <div class="snapshot-item"><span class="snapshot-label">Members</span><span class="snapshot-value" id="ov-members">—</span></div>
+          <div class="snapshot-item"><span class="snapshot-label">Online</span><span class="snapshot-value text-g" id="ov-online">—</span></div>
+          <div class="snapshot-item"><span class="snapshot-label">Channels</span><span class="snapshot-value" id="ov-channels">—</span></div>
+          <div class="snapshot-item"><span class="snapshot-label">Roles</span><span class="snapshot-value" id="ov-roles">—</span></div>
+          <div class="snapshot-item"><span class="snapshot-label">Boosts</span><span class="snapshot-value text-p" id="ov-boosts">—</span></div>
+          <div class="snapshot-item"><span class="snapshot-label">Boost Level</span><span class="snapshot-value text-p" id="ov-boostLevel">—</span></div>
         </div>
       </div>
     </div>
 
-    <!-- ═══ CONTENT ═══ -->
+    <!-- ═══════════════════════════════════════
+         CONTENT EDITOR
+         Components: hero, about, features,
+         faq, cta — no analytics widgets
+    ════════════════════════════════════════ -->
     <div class="view" id="view-content">
       <div class="ph">
         <div><h1>Content Editor</h1><p>Edit all website text without touching code.</p></div>
@@ -431,7 +578,10 @@
       </div>
     </div>
 
-    <!-- ═══ BRANDING ═══ -->
+    <!-- ═══════════════════════════════════════
+         BRANDING & THEME
+         Components: colors, display toggles
+    ════════════════════════════════════════ -->
     <div class="view" id="view-branding">
       <div class="ph">
         <div><h1>Branding & Theme</h1><p>Colors, fonts, and imagery for the public site.</p></div>
@@ -452,7 +602,10 @@
       </div>
     </div>
 
-    <!-- ═══ SECTIONS ═══ -->
+    <!-- ═══════════════════════════════════════
+         SECTION MANAGER
+         Components: section toggle + order list
+    ════════════════════════════════════════ -->
     <div class="view" id="view-sections">
       <div class="ph">
         <div><h1>Section Manager</h1><p>Toggle sections on/off. Drag to reorder.</p></div>
@@ -461,13 +614,16 @@
       <div class="card"><div class="ct">Page Sections</div><div id="sectionList"></div></div>
     </div>
 
-    <!-- ═══ DISCORD ═══ -->
+    <!-- ═══════════════════════════════════════
+         DISCORD SETTINGS
+         Components: links, webhook config only
+    ════════════════════════════════════════ -->
     <div class="view" id="view-discord">
       <div class="ph">
         <div><h1>Discord Settings</h1><p>Invite links, webhooks, and display options.</p></div>
         <div class="ph-a"><button class="btn btn-sm btn-p" onclick="saveDiscord()">✓ Save Settings</button></div>
       </div>
-      <div class="g2" style="gap:16px;margin-bottom:16px;">
+      <div class="g2" style="gap:16px;">
         <div class="card">
           <div class="ct">Links</div>
           <div class="field"><label>Discord Invite Link (used site-wide)</label><input type="url" id="f-discord_invite" /><div class="hint">Used in nav, hero, and CTA automatically</div></div>
@@ -482,7 +638,10 @@
       </div>
     </div>
 
-    <!-- ═══ FORMS ═══ -->
+    <!-- ═══════════════════════════════════════
+         FORMS & SUBMISSIONS
+         Components: counts, submission table
+    ════════════════════════════════════════ -->
     <div class="view" id="view-forms">
       <div class="ph">
         <div><h1>Forms & Submissions</h1><p>Manage incoming form submissions.</p></div>
@@ -502,302 +661,109 @@
       </div>
     </div>
 
-    <!-- ═══ ANALYTICS ═══ -->
+    <!-- ═══════════════════════════════════════
+         ANALYTICS (deep metrics)
+         Components: web traffic, Discord
+         intelligence full widget, vote/submission
+         trends, engagement charts
+    ════════════════════════════════════════ -->
     <div class="view" id="view-analytics">
       <div class="ph">
-        <div><h1>Analytics</h1><p>Traffic and engagement overview.</p></div>
+        <div><h1>Analytics</h1><p>Deep traffic, Discord, and engagement metrics.</p></div>
       </div>
+
+      <!-- Website metrics -->
       <div class="g4 mb16">
-        <div class="sc"><div class="slabel">Page Views</div><div class="sval" id="an-views">—</div></div>
-        <div class="sc"><div class="slabel">Unique Visitors</div><div class="sval" id="an-visitors">—</div></div>
-        <div class="sc"><div class="slabel">CTA Clicks</div><div class="sval" id="an-cta">—</div></div>
-        <div class="sc"><div class="slabel">Form Submissions</div><div class="sval" id="an-forms">—</div></div>
+        <div class="sc"><div class="slabel">Page Views</div><div class="sval" id="an-views">—</div><div class="ssub">last 30 days</div></div>
+        <div class="sc"><div class="slabel">Unique Visitors</div><div class="sval" id="an-visitors">—</div><div class="ssub">last 30 days</div></div>
+        <div class="sc"><div class="slabel">CTA Clicks</div><div class="sval" id="an-cta">—</div><div class="ssub">total</div></div>
+        <div class="sc"><div class="slabel">Form Submissions</div><div class="sval" id="an-forms">—</div><div class="ssub">total</div></div>
       </div>
-      <div class="g2">
+
+      <!-- Traffic charts -->
+      <div class="g2 mb16">
         <div class="card"><div class="ct">CTA Clicks by Button</div><div id="an-ctaBars"><div class="text-dim" style="font-size:12px;padding:8px 0;">No data yet</div></div></div>
         <div class="card"><div class="ct">Top Referrers</div><div id="an-refBars"><div class="text-dim" style="font-size:12px;padding:8px 0;">No data yet</div></div></div>
       </div>
+
+      <!-- Full Discord Intelligence widget (analytics page only) -->
+      <section class="discord-overview-card">
+        <div class="discord-overview-header">
+          <div class="discord-overview-title-wrap">
+            <img id="guild_icon" class="discord-guild-icon" src="" alt="Server icon" style="display:none;" />
+            <div>
+              <div class="discord-overview-eyebrow">Discord Intelligence</div>
+              <h2 class="discord-overview-title">Server Overview</h2>
+              <p class="discord-overview-subtitle" id="an-discordSubtitle">Live server stats powered by BlazeBot.</p>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <div class="discord-status-pill">
+              <span class="discord-status-dot"></span>
+              <span id="discord_connection_status">Not loaded</span>
+            </div>
+            <button id="discordRefreshBtn" class="btn btn-sm" onclick="loadDiscordSummary(true)" title="Refresh live stats">🔄 Refresh</button>
+          </div>
+        </div>
+
+        <div class="discord-stat-grid">
+          <div class="discord-stat-tile">
+            <div class="discord-stat-label">Members</div>
+            <div class="discord-stat-value" id="member_count">—</div>
+            <div class="discord-stat-sub">Total in server</div>
+          </div>
+          <div class="discord-stat-tile">
+            <div class="discord-stat-label">Online</div>
+            <div class="discord-stat-value" id="online_count">—</div>
+            <div class="discord-stat-sub">Currently active</div>
+          </div>
+          <div class="discord-stat-tile">
+            <div class="discord-stat-label">Channels</div>
+            <div class="discord-stat-value" id="total_channels">—</div>
+            <div class="discord-stat-sub">Text + voice</div>
+          </div>
+          <div class="discord-stat-tile">
+            <div class="discord-stat-label">Roles</div>
+            <div class="discord-stat-value" id="total_roles">—</div>
+            <div class="discord-stat-sub">Configured roles</div>
+          </div>
+          <div class="discord-stat-tile">
+            <div class="discord-stat-label">Boosts</div>
+            <div class="discord-stat-value" id="boost_count">—</div>
+            <div class="discord-stat-sub">Server boosts</div>
+          </div>
+          <div class="discord-stat-tile">
+            <div class="discord-stat-label">Boost Level</div>
+            <div class="discord-stat-value" id="boost_level">—</div>
+            <div class="discord-stat-sub">Current tier</div>
+          </div>
+        </div>
+
+        <div class="discord-meta-row">
+          <div class="discord-meta-card">
+            <div class="discord-meta-label">Server</div>
+            <div class="discord-meta-value" id="guild_name">Loading...</div>
+            <div class="discord-meta-value discord-meta-muted" id="guild_description" style="margin-top:8px;">—</div>
+          </div>
+          <div class="discord-meta-card">
+            <div class="discord-meta-label">Channel Breakdown</div>
+            <div class="discord-meta-value">Text: <span id="text_channels">—</span></div>
+            <div class="discord-meta-value discord-meta-muted" style="margin-top:8px;">Voice: <span id="voice_channels">—</span></div>
+          </div>
+          <div class="discord-meta-card">
+            <div class="discord-meta-label">Last Sync</div>
+            <div class="discord-meta-value" id="fetched_at">—</div>
+            <div class="discord-meta-value discord-meta-muted" style="margin-top:8px;">Guild ID: <span id="guild_id">—</span></div>
+          </div>
+        </div>
+      </section>
     </div>
 
-<div class="card" style="margin-bottom:20px;">
-  
-  <style>
-.stat-box {
-  background: #111;
-  padding: 15px;
-  border-radius: 10px;
-  min-width: 150px;
-  text-align: center;
-  border: 1px solid rgba(255,255,255,0.05);
-}
-</style>
-
-  <style>
-.discord-overview-card {
-  margin-bottom: 24px;
-  padding: 24px;
-  border-radius: 20px;
-  background: linear-gradient(180deg, rgba(20, 20, 28, 0.98) 0%, rgba(14, 14, 20, 0.98) 100%);
-  border: 1px solid rgba(139, 92, 246, 0.16);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
-}
-
-.discord-overview-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-
-.discord-overview-title-wrap {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.discord-guild-icon {
-  width: 52px;
-  height: 52px;
-  border-radius: 16px;
-  object-fit: cover;
-  border: 1px solid rgba(255,255,255,0.08);
-  background: rgba(255,255,255,0.03);
-}
-
-.discord-overview-eyebrow {
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.5);
-  margin-bottom: 4px;
-}
-
-.discord-overview-title {
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  color: #fff;
-  margin: 0;
-}
-
-.discord-overview-subtitle {
-  margin: 4px 0 0;
-  color: rgba(255,255,255,0.62);
-  font-size: 14px;
-}
-
-.discord-status-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: rgba(34, 197, 94, 0.12);
-  border: 1px solid rgba(34, 197, 94, 0.22);
-  color: #86efac;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.discord-status-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  background: #22c55e;
-  box-shadow: 0 0 12px rgba(34, 197, 94, 0.7);
-}
-
-.discord-stat-grid {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.discord-stat-tile {
-  position: relative;
-  overflow: hidden;
-  padding: 18px;
-  border-radius: 18px;
-  background: rgba(255,255,255,0.025);
-  border: 1px solid rgba(255,255,255,0.06);
-  transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease;
-}
-
-.discord-stat-tile:hover {
-  transform: translateY(-2px);
-  border-color: rgba(139, 92, 246, 0.28);
-  background: rgba(255,255,255,0.04);
-}
-
-.discord-stat-label {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.45);
-  margin-bottom: 10px;
-}
-
-.discord-stat-value {
-  font-size: 32px;
-  line-height: 1;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: #fff;
-}
-
-.discord-stat-sub {
-  margin-top: 8px;
-  font-size: 13px;
-  color: rgba(255,255,255,0.54);
-}
-
-.discord-meta-row {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr 1fr;
-  gap: 14px;
-  margin-top: 14px;
-}
-
-.discord-meta-card {
-  padding: 18px;
-  border-radius: 18px;
-  background: rgba(255,255,255,0.025);
-  border: 1px solid rgba(255,255,255,0.06);
-}
-
-.discord-meta-label {
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: rgba(255,255,255,0.45);
-  margin-bottom: 8px;
-}
-
-.discord-meta-value {
-  font-size: 15px;
-  color: #fff;
-  font-weight: 600;
-  word-break: break-word;
-}
-
-.discord-meta-muted {
-  color: rgba(255,255,255,0.58);
-  font-weight: 500;
-}
-
-@media (max-width: 1200px) {
-  .discord-stat-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .discord-meta-row {
-    grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 700px) {
-  .discord-stat-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .discord-overview-title {
-    font-size: 22px;
-  }
-
-  .discord-stat-value {
-    font-size: 26px;
-  }
-}
-</style>
-
-<section class="discord-overview-card">
-  <div class="discord-overview-header">
-    <div class="discord-overview-title-wrap">
-      <img id="guild_icon" class="discord-guild-icon" src="" alt="Server icon" style="display:none;" />
-      <div>
-        <div class="discord-overview-eyebrow">Discord Intelligence</div>
-        <h2 class="discord-overview-title">Server Overview</h2>
-        <p class="discord-overview-subtitle">Live server stats powered by BlazeBot.</p>
-      </div>
-    </div>
-
-    <div style="display:flex;align-items:center;gap:10px;">
-      <div class="discord-status-pill">
-        <span class="discord-status-dot"></span>
-        <span id="discord_connection_status">Not loaded</span>
-      </div>
-      <button id="discordRefreshBtn" class="btn btn-sm" onclick="loadDiscordSummary(true)" title="Refresh live stats">🔄 Refresh</button>
-    </div>
-  </div>
-
-  <div class="discord-stat-grid">
-    <div class="discord-stat-tile">
-      <div class="discord-stat-label">Members</div>
-      <div class="discord-stat-value" id="member_count">—</div>
-      <div class="discord-stat-sub">Total in server</div>
-    </div>
-
-    <div class="discord-stat-tile">
-      <div class="discord-stat-label">Online</div>
-      <div class="discord-stat-value" id="online_count">—</div>
-      <div class="discord-stat-sub">Currently active</div>
-    </div>
-
-    <div class="discord-stat-tile">
-      <div class="discord-stat-label">Channels</div>
-      <div class="discord-stat-value" id="total_channels">—</div>
-      <div class="discord-stat-sub">Text + voice</div>
-    </div>
-
-    <div class="discord-stat-tile">
-      <div class="discord-stat-label">Roles</div>
-      <div class="discord-stat-value" id="total_roles">—</div>
-      <div class="discord-stat-sub">Configured roles</div>
-    </div>
-
-    <div class="discord-stat-tile">
-      <div class="discord-stat-label">Boosts</div>
-      <div class="discord-stat-value" id="boost_count">—</div>
-      <div class="discord-stat-sub">Server boosts</div>
-    </div>
-
-    <div class="discord-stat-tile">
-      <div class="discord-stat-label">Boost Level</div>
-      <div class="discord-stat-value" id="boost_level">—</div>
-      <div class="discord-stat-sub">Current tier</div>
-    </div>
-  </div>
-
-  <div class="discord-meta-row">
-    <div class="discord-meta-card">
-      <div class="discord-meta-label">Server</div>
-      <div class="discord-meta-value" id="guild_name">Loading...</div>
-      <div class="discord-meta-value discord-meta-muted" id="guild_description" style="margin-top:8px;">—</div>
-    </div>
-
-    <div class="discord-meta-card">
-      <div class="discord-meta-label">Channel Breakdown</div>
-      <div class="discord-meta-value">
-        Text: <span id="text_channels">—</span>
-      </div>
-      <div class="discord-meta-value discord-meta-muted" style="margin-top:8px;">
-        Voice: <span id="voice_channels">—</span>
-      </div>
-    </div>
-
-    <div class="discord-meta-card">
-      <div class="discord-meta-label">Last Sync</div>
-      <div class="discord-meta-value" id="fetched_at">—</div>
-      <div class="discord-meta-value discord-meta-muted" style="margin-top:8px;">
-        Guild ID: <span id="guild_id">—</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-    <!-- ═══ TEAM ═══ -->
+    <!-- ═══════════════════════════════════════
+         TEAM & ADMINS
+         Components: role legend cards, member
+         table with last-login, add member modal
+    ════════════════════════════════════════ -->
     <div class="view" id="view-team">
       <div class="ph">
         <div><h1>Team & Admins</h1><p>Manage who has access to this dashboard.</p></div>
@@ -807,21 +773,15 @@
       <!-- Role explanation -->
       <div class="g3 mb16">
         <div class="card" style="border-color:rgba(251,191,36,.2)">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-            <span class="tag y">Owner</span>
-          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span class="tag y">Owner</span></div>
           <div style="font-size:12.5px;color:var(--muted);line-height:1.7;">Full access to everything. Can add/remove any member. Cannot be removed. That's you.</div>
         </div>
         <div class="card" style="border-color:rgba(124,92,191,.2)">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-            <span class="tag p">Admin</span>
-          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span class="tag p">Admin</span></div>
           <div style="font-size:12.5px;color:var(--muted);line-height:1.7;">Can edit all content, manage settings, view and manage all forms. Can add moderators but not other admins.</div>
         </div>
         <div class="card" style="border-color:rgba(96,165,250,.2)">
-          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
-            <span class="tag b">Moderator</span>
-          </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;"><span class="tag b">Moderator</span></div>
           <div style="font-size:12.5px;color:var(--muted);line-height:1.7;">Can view and manage form submissions only. Cannot edit site content or settings.</div>
         </div>
       </div>
@@ -873,7 +833,7 @@
 // ══════════════════════════════════════════
 //  CONFIG
 // ══════════════════════════════════════════
-const API = ''; // Same origin — server serves this file
+const API = '';
 
 // ══════════════════════════════════════════
 //  STATE
@@ -884,7 +844,7 @@ let state = {
   features: [],
   faqs:     [],
   sections: [],
-  dirty: false,
+  dirty:    false,
 };
 
 const DEFAULT_SECTIONS = [
@@ -904,8 +864,29 @@ const DEFAULT_SECTIONS = [
 // ══════════════════════════════════════════
 async function init() {
   await loadCurrentUser();
-  await Promise.all([loadContent(), loadSettings(), loadAnalyticsSummary(), loadSubmissionCounts()]);
+  await Promise.all([
+    loadContent(),
+    loadSettings(),
+    loadAnalyticsSummary(),
+    loadSubmissionCounts(),
+  ]);
   bindColorPickers();
+  // Load Discord snapshot for Overview page on first load
+  loadDiscordSummary();
+}
+
+// ══════════════════════════════════════════
+//  MOBILE SIDEBAR
+// ══════════════════════════════════════════
+function openSidebar() {
+  document.getElementById('sidebar').classList.add('open');
+  document.getElementById('sbBackdrop').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sbBackdrop').classList.remove('open');
+  document.body.style.overflow = '';
 }
 
 // ══════════════════════════════════════════
@@ -914,10 +895,7 @@ async function init() {
 async function loadCurrentUser() {
   try {
     const res = await api('/auth/me');
-    if (!res.authenticated) {
-      window.location.href = '/auth/discord';
-      return;
-    }
+    if (!res.authenticated) { window.location.href = '/auth/discord'; return; }
     const u = res.user;
     const av = document.getElementById('sidebarAvatar');
     if (u.avatar) {
@@ -926,7 +904,8 @@ async function loadCurrentUser() {
       av.textContent = (u.display_name || u.username || '?')[0].toUpperCase();
     }
     document.getElementById('sidebarName').textContent = u.display_name || u.username;
-    document.getElementById('sidebarRole').textContent = u.role.charAt(0).toUpperCase() + u.role.slice(1) + ' · Discord OAuth';
+    document.getElementById('sidebarRole').textContent =
+      u.role.charAt(0).toUpperCase() + u.role.slice(1) + ' · Discord OAuth';
   } catch (e) {
     window.location.href = '/auth/discord';
   }
@@ -955,19 +934,13 @@ async function loadContent() {
   try {
     const data = await api('/api/content');
     state.content = data;
-
-    // Populate text fields
     for (const [k, v] of Object.entries(data)) {
       const el = document.getElementById('f-' + k);
       if (el) el.value = v;
     }
-
-    // Features & FAQ are JSON
-    if (data.features_cards)  { state.features = JSON.parse(data.features_cards); renderFeatures(); }
-    if (data.faq_items)        { state.faqs     = JSON.parse(data.faq_items);      renderFaqs(); }
-  } catch (e) {
-    console.error('loadContent:', e);
-  }
+    if (data.features_cards) { state.features = JSON.parse(data.features_cards); renderFeatures(); }
+    if (data.faq_items)       { state.faqs     = JSON.parse(data.faq_items);      renderFaqs(); }
+  } catch (e) { console.error('loadContent:', e); }
 }
 
 async function saveContent() {
@@ -981,24 +954,14 @@ async function saveContent() {
     'cta_label','cta_heading','cta_desc','cta_btn1_text','cta_btn2_text','cta_btn3_text',
     'nav_cta_text','footer_copy',
   ];
-
   const updates = {};
-  keys.forEach(k => {
-    const el = document.getElementById('f-' + k);
-    if (el) updates[k] = el.value;
-  });
-
-  // Include features & faq JSON
+  keys.forEach(k => { const el = document.getElementById('f-' + k); if (el) updates[k] = el.value; });
   updates.features_cards = JSON.stringify(state.features);
   updates.faq_items      = JSON.stringify(state.faqs);
-
   try {
     await api('/api/content', 'POST', updates);
-    toast('✓ Content saved');
-    markClean();
-  } catch (e) {
-    toast('✗ Save failed — ' + e.message);
-  }
+    toast('✓ Content saved'); markClean();
+  } catch (e) { toast('✗ Save failed — ' + e.message); }
 }
 
 // ══════════════════════════════════════════
@@ -1008,44 +971,32 @@ async function loadSettings() {
   try {
     const data = await api('/api/settings');
     state.settings = data;
-
-    // Text/URL fields
     ['discord_invite','topgg_server_id','tiktok_url','discord_webhook_url'].forEach(k => {
       const el = document.getElementById('f-' + k);
       if (el && data[k]) el.value = data[k];
     });
-
-    // Toggles
     ['show_topgg_widget','show_member_count','show_discord_widget','webhook_enabled'].forEach(k => {
       const el = document.getElementById('f-' + k);
       if (el) el.checked = data[k] === 'true';
     });
-
-    // Colors
     ['accent_color','accent_light'].forEach(k => {
       const picker = document.getElementById('f-' + k);
       const hex    = document.getElementById('f-' + k + '_hex');
       if (picker && data[k]) picker.value = data[k];
       if (hex    && data[k]) hex.value    = data[k];
     });
-
-    // Sections
-    const order    = data.section_order   ? JSON.parse(data.section_order)   : DEFAULT_SECTIONS.map(s => s.id);
+    const order    = data.section_order     ? JSON.parse(data.section_order)     : DEFAULT_SECTIONS.map(s => s.id);
     const disabled = data.sections_disabled ? JSON.parse(data.sections_disabled) : [];
     state.sections = order.map(id => {
       const def = DEFAULT_SECTIONS.find(s => s.id === id) || { id, name: id };
       return { ...def, enabled: !disabled.includes(id) };
     });
     renderSections();
-
-    // Webhook status indicator
     if (data.discord_webhook_url && data.webhook_enabled === 'true') {
       document.getElementById('webhookStatus').className = 'sb2 on';
       document.getElementById('webhookStatus').textContent = 'Active';
     }
-  } catch (e) {
-    console.error('loadSettings:', e);
-  }
+  } catch (e) { console.error('loadSettings:', e); }
 }
 
 async function saveBranding() {
@@ -1058,10 +1009,8 @@ async function saveBranding() {
     const el = document.getElementById('f-' + k);
     if (el) updates[k] = String(el.checked);
   });
-  try {
-    await api('/api/settings', 'POST', updates);
-    toast('✓ Theme saved');
-  } catch (e) { toast('✗ ' + e.message); }
+  try { await api('/api/settings', 'POST', updates); toast('✓ Theme saved'); }
+  catch (e) { toast('✗ ' + e.message); }
 }
 
 async function saveDiscord() {
@@ -1074,10 +1023,8 @@ async function saveDiscord() {
     const el = document.getElementById('f-' + k);
     if (el) updates[k] = String(el.checked);
   });
-  try {
-    await api('/api/settings', 'POST', updates);
-    toast('✓ Discord settings saved');
-  } catch (e) { toast('✗ ' + e.message); }
+  try { await api('/api/settings', 'POST', updates); toast('✓ Discord settings saved'); }
+  catch (e) { toast('✗ ' + e.message); }
 }
 
 async function saveSections() {
@@ -1085,11 +1032,10 @@ async function saveSections() {
   const disabled = state.sections.filter(s => !s.enabled).map(s => s.id);
   try {
     await api('/api/settings', 'POST', {
-      section_order:    JSON.stringify(order),
+      section_order:     JSON.stringify(order),
       sections_disabled: JSON.stringify(disabled),
     });
-    toast('✓ Section order saved');
-    markClean();
+    toast('✓ Section order saved'); markClean();
   } catch (e) { toast('✗ ' + e.message); }
 }
 
@@ -1199,12 +1145,10 @@ async function loadSubmissions(type, btn) {
     const data = await api(`/api/submissions?type=${type}`);
     const subs = data.submissions;
     if (!subs.length) { el.innerHTML = '<div class="loading text-dim">No submissions yet.</div>'; return; }
-
     const statusTag = s => {
       const m = { new:'g', read:'', reviewed:'b', approved:'g', denied:'r', archived:'' };
       return `<span class="tag ${m[s]||''}">${s}</span>`;
     };
-
     el.innerHTML = `<table>
       <thead><tr>
         <th>Date</th><th>Name / User</th><th>Discord</th><th>Subject / Type</th><th>Status</th><th>Actions</th>
@@ -1216,12 +1160,10 @@ async function loadSubmissions(type, btn) {
           <td class="text-mono text-muted" style="font-size:11.5px;">${esc(s.data.discord || s.data.discord_id || '—')}</td>
           <td>${esc(s.data.subject || s.data.role || s.data.reason || type)}</td>
           <td>${statusTag(s.status)}</td>
-          <td>
-            <div class="row gap8">
-              <button class="btn btn-xs" onclick="markRead(${s.id})">Mark Read</button>
-              <button class="btn btn-xs btn-d" onclick="deleteSubmission(${s.id})">Delete</button>
-            </div>
-          </td>
+          <td><div class="row gap8">
+            <button class="btn btn-xs" onclick="markRead(${s.id})">Mark Read</button>
+            <button class="btn btn-xs btn-d" onclick="deleteSubmission(${s.id})">Delete</button>
+          </div></td>
         </tr>`).join('')}
       </tbody>
     </table>`;
@@ -1253,26 +1195,27 @@ function currentFormType() {
 async function loadAnalyticsSummary() {
   try {
     const data = await api('/api/analytics/summary');
+    // Overview page stats
     document.getElementById('ov-views').textContent    = data.page_views.toLocaleString();
     document.getElementById('ov-visitors').textContent = data.unique_visitors.toLocaleString();
     document.getElementById('ov-cta').textContent      = data.cta_clicks.reduce((a,c) => a + c.count, 0).toLocaleString();
-
-    // Analytics page
+    // Analytics page stats
     document.getElementById('an-views').textContent    = data.page_views.toLocaleString();
     document.getElementById('an-visitors').textContent = data.unique_visitors.toLocaleString();
     document.getElementById('an-cta').textContent      = data.cta_clicks.reduce((a,c) => a + c.count, 0).toLocaleString();
     document.getElementById('an-forms').textContent    = data.form_submissions.reduce((a,c) => a + c.count, 0).toLocaleString();
-
     // CTA bars
     const maxCta = Math.max(...data.cta_clicks.map(c => c.count), 1);
     document.getElementById('an-ctaBars').innerHTML = data.cta_clicks.length
       ? data.cta_clicks.map(c => `<div class="bar-row"><span class="bar-lbl">${esc(c.meta||'—')}</span><div class="bar-tr"><div class="bar-f" style="width:${Math.round(c.count/maxCta*100)}%"></div></div><span class="bar-v">${c.count}</span></div>`).join('')
       : '<div class="text-dim" style="font-size:12px;padding:8px 0;">No data yet</div>';
-
     // Referrer bars
     const maxRef = Math.max(...data.referrers.map(r => r.count), 1);
     document.getElementById('an-refBars').innerHTML = data.referrers.length
-      ? data.referrers.map(r => { const meta = (() => { try { return JSON.parse(r.meta)?.ref || r.meta; } catch { return r.meta || 'Direct'; } })(); return `<div class="bar-row"><span class="bar-lbl">${esc(meta)}</span><div class="bar-tr"><div class="bar-f" style="width:${Math.round(r.count/maxRef*100)}%"></div></div><span class="bar-v">${r.count}</span></div>`; }).join('')
+      ? data.referrers.map(r => {
+          const meta = (() => { try { return JSON.parse(r.meta)?.ref || r.meta; } catch { return r.meta || 'Direct'; } })();
+          return `<div class="bar-row"><span class="bar-lbl">${esc(meta)}</span><div class="bar-tr"><div class="bar-f" style="width:${Math.round(r.count/maxRef*100)}%"></div></div><span class="bar-v">${r.count}</span></div>`;
+        }).join('')
       : '<div class="text-dim" style="font-size:12px;padding:8px 0;">No data yet</div>';
   } catch (e) { console.error('loadAnalyticsSummary:', e); }
 }
@@ -1285,24 +1228,59 @@ async function loadTeam() {
   el.innerHTML = '<div class="loading"><div class="spin"></div> Loading team…</div>';
   try {
     const members = await api('/api/team');
+    // Sort: owner first, then admin, then moderator, then by most recently active
+    const roleOrder = { owner: 0, admin: 1, moderator: 2 };
+    members.sort((a, b) => {
+      const roleDiff = (roleOrder[a.role] ?? 9) - (roleOrder[b.role] ?? 9);
+      if (roleDiff !== 0) return roleDiff;
+      // Most recently active first within same role
+      const aTime = a.last_login ? new Date(a.last_login).getTime() : 0;
+      const bTime = b.last_login ? new Date(b.last_login).getTime() : 0;
+      return bTime - aTime;
+    });
+
     const roleTag = r => `<span class="tag role-${r}">${r.charAt(0).toUpperCase()+r.slice(1)}</span>`;
+
+    const relativeTime = (ts) => {
+      if (!ts) return '<span class="text-dim">Never</span>';
+      const diff = Date.now() - new Date(ts).getTime();
+      const mins  = Math.floor(diff / 60000);
+      const hours = Math.floor(diff / 3600000);
+      const days  = Math.floor(diff / 86400000);
+      if (mins < 2)   return '<span class="text-g" style="font-size:11.5px;">Just now</span>';
+      if (mins < 60)  return `<span style="font-size:11.5px;color:var(--muted);">${mins}m ago</span>`;
+      if (hours < 24) return `<span style="font-size:11.5px;color:var(--muted);">${hours}h ago</span>`;
+      if (days < 7)   return `<span style="font-size:11.5px;color:var(--dim);">${days}d ago</span>`;
+      return `<span style="font-size:11.5px;color:var(--dim);">${new Date(ts).toLocaleDateString()}</span>`;
+    };
+
     el.innerHTML = `<table>
-      <thead><tr><th>Member</th><th>Discord ID</th><th>Role</th><th>Added</th><th>Last Login</th><th>Actions</th></tr></thead>
+      <thead><tr>
+        <th>Member</th>
+        <th>Discord ID</th>
+        <th>Role</th>
+        <th>Added</th>
+        <th>Last Login</th>
+        <th>Actions</th>
+      </tr></thead>
       <tbody>
         ${members.map(m => `<tr>
           <td>
             <div class="row gap12">
-              <div class="t-av">${m.avatar_url ? `<img src="${m.avatar_url}" alt="" />` : (m.display_name||m.username||'?')[0].toUpperCase()}</div>
+              <div class="t-av">${m.avatar_url
+                ? `<img src="${m.avatar_url}" alt="" />`
+                : (m.display_name||m.username||'?')[0].toUpperCase()
+              }</div>
               <div>
                 <div style="font-weight:500;font-size:13px;">${esc(m.display_name||m.username)}</div>
                 <div class="text-dim" style="font-size:11px;">@${esc(m.username)}</div>
               </div>
             </div>
           </td>
-          <td class="text-mono text-dim" style="font-size:11.5px;">${m.discord_id}</td>
+          <td class="text-mono text-dim" style="font-size:11.5px;">${esc(m.discord_id)}</td>
           <td>${roleTag(m.role)}</td>
           <td class="text-dim" style="font-size:11.5px;">${m.added_at ? new Date(m.added_at).toLocaleDateString() : '—'}</td>
-          <td class="text-dim" style="font-size:11.5px;">${m.last_login ? new Date(m.last_login).toLocaleDateString() : 'Never'}</td>
+          <td>${relativeTime(m.last_login)}</td>
           <td>
             ${m.is_owner ? '<span class="text-dim" style="font-size:11px;">Owner</span>' : `
               <div class="row gap8">
@@ -1324,7 +1302,7 @@ async function loadTeam() {
 }
 
 function openAddMember() { document.getElementById('addMemberModal').classList.add('open'); }
-function closeModal() { document.getElementById('addMemberModal').classList.remove('open'); }
+function closeModal()    { document.getElementById('addMemberModal').classList.remove('open'); }
 
 async function addMember() {
   const discord_id = document.getElementById('newMemberID').value.trim();
@@ -1340,19 +1318,14 @@ async function addMember() {
 }
 
 async function changeRole(discord_id, role) {
-  try {
-    await api(`/api/team/${discord_id}`, 'PATCH', { role });
-    toast(`✓ Role updated to ${role}`);
-  } catch (e) { toast('✗ ' + e.message); }
+  try { await api(`/api/team/${discord_id}`, 'PATCH', { role }); toast(`✓ Role updated to ${role}`); }
+  catch (e) { toast('✗ ' + e.message); }
 }
 
 async function removeMember(discord_id, name) {
   if (!confirm(`Remove ${name} from the team? They will lose dashboard access immediately.`)) return;
-  try {
-    await api(`/api/team/${discord_id}`, 'DELETE');
-    toast('✓ Member removed');
-    loadTeam();
-  } catch (e) { toast('✗ ' + e.message); }
+  try { await api(`/api/team/${discord_id}`, 'DELETE'); toast('✓ Member removed'); loadTeam(); }
+  catch (e) { toast('✗ ' + e.message); }
 }
 
 // ══════════════════════════════════════════
@@ -1380,21 +1353,35 @@ function syncHex(k) {
 // ══════════════════════════════════════════
 function nav(view, el) {
   document.querySelectorAll('.ni').forEach(n => n.classList.remove('active'));
-  if (el) el.classList.add('active');
-  else {
-    // find the button that navigates to this view
+  if (el) {
+    el.classList.add('active');
+  } else {
     document.querySelectorAll('.ni').forEach(n => {
       if (n.getAttribute('onclick')?.includes(`'${view}'`)) n.classList.add('active');
     });
   }
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('view-' + view).classList.add('active');
-  const labels = { overview:'Overview', content:'Content Editor', branding:'Branding & Theme', sections:'Section Manager', discord:'Discord Settings', forms:'Forms & Submissions', analytics:'Analytics', team:'Team & Admins' };
+
+  const labels = {
+    overview:  'Overview',
+    content:   'Content Editor',
+    branding:  'Branding & Theme',
+    sections:  'Section Manager',
+    discord:   'Discord Settings',
+    forms:     'Forms & Submissions',
+    analytics: 'Analytics',
+    team:      'Team & Admins',
+  };
   document.getElementById('crumb').textContent = labels[view] || view;
-  if (view === 'team') loadTeam();
-  if (view === 'forms') loadSubmissions('contact');
-  if (view === 'analytics') loadAnalyticsSummary();
-  if (view === 'analytics') loadDiscordSummary();
+
+  // Per-page data loads
+  if (view === 'team')      loadTeam();
+  if (view === 'forms')     loadSubmissions('contact');
+  if (view === 'analytics') { loadAnalyticsSummary(); loadDiscordSummary(); }
+
+  // Close sidebar on mobile after navigation
+  closeSidebar();
 }
 
 // ══════════════════════════════════════════
@@ -1431,74 +1418,99 @@ document.getElementById('addMemberModal').addEventListener('click', function(e) 
   if (e.target === this) closeModal();
 });
 
-init();
-loadDiscordSummary();
-// ── BlazeBot / Discord Stats ──────────────────────────────
-// Fetched at most once per session automatically.
-// The admin can force a refresh with the 🔄 button.
+// ══════════════════════════════════════════
+//  DISCORD SUMMARY
+//  Populates both Overview snapshot AND
+//  the full Analytics widget.
+//  Fetched at most once per session unless
+//  the admin forces a refresh.
+// ══════════════════════════════════════════
 let discordLoaded = false;
 
 async function loadDiscordSummary(force = false) {
-  // Skip if already loaded this session and not a manual refresh
   if (discordLoaded && !force) return;
 
-  const statusEl = document.getElementById('discord_connection_status');
-  const refreshBtn = document.getElementById('discordRefreshBtn');
+  // Elements that exist only in Analytics page
+  const statusEl    = document.getElementById('discord_connection_status');
+  const refreshBtn  = document.getElementById('discordRefreshBtn');
+  const subtitleEl  = document.getElementById('an-discordSubtitle');
 
-  statusEl.textContent = 'Loading…';
+  if (statusEl)   statusEl.textContent = 'Loading…';
   if (refreshBtn) { refreshBtn.disabled = true; refreshBtn.textContent = '⏳ Loading…'; }
 
   try {
-    const res = await fetch('/api/discord/summary');
+    const res  = await fetch('/api/discord/summary');
     const data = await res.json();
 
-    // Backend returned a structured error (e.g. bad token, bot not in server)
     if (data.error) {
-      statusEl.textContent = 'Error';
+      if (statusEl) statusEl.textContent = 'Error';
+      if (subtitleEl) subtitleEl.textContent = data.hint || data.message;
+      // Update overview status pill
+      const ovStatus = document.getElementById('ov-botStatus');
+      if (ovStatus) { ovStatus.className = 'sb2 off'; ovStatus.textContent = 'Bot Error'; }
+      const ovDiscord = document.getElementById('ov-discordStatus');
+      if (ovDiscord) { ovDiscord.className = 'sb2 off'; ovDiscord.textContent = 'Disconnected'; }
       console.warn('[Discord]', data.message);
-      // Show the actionable hint in the subtitle so the admin knows what to fix
-      const sub = document.querySelector('.discord-overview-subtitle');
-      if (sub) sub.textContent = data.hint || data.message;
       return;
     }
 
     discordLoaded = true;
 
-    statusEl.textContent = data.bot_connected ? 'Connected' : 'Disconnected';
-    document.getElementById('guild_name').textContent         = data.guild_name         ?? '—';
-    document.getElementById('guild_description').textContent  = data.guild_description  ?? 'No description set';
-    document.getElementById('member_count').textContent       = data.member_count       ?? '—';
-    document.getElementById('online_count').textContent       = data.online_count       ?? '—';
-    document.getElementById('total_channels').textContent     = data.total_channels     ?? '—';
-    document.getElementById('text_channels').textContent      = data.text_channels      ?? '—';
-    document.getElementById('voice_channels').textContent     = data.voice_channels     ?? '—';
-    document.getElementById('total_roles').textContent        = data.total_roles        ?? '—';
-    document.getElementById('boost_count').textContent        = data.boost_count        ?? '—';
-    document.getElementById('boost_level').textContent        = data.boost_level        ?? '—';
-    document.getElementById('guild_id').textContent           = data.guild_id           ?? '—';
+    // ── Analytics page (full widget) ──
+    if (statusEl) statusEl.textContent = data.bot_connected ? 'Connected' : 'Disconnected';
+    const setEl = (id, val) => { const e = document.getElementById(id); if (e) e.textContent = val ?? '—'; };
+    setEl('guild_name',        data.guild_name);
+    setEl('guild_description', data.guild_description || 'No description set');
+    setEl('member_count',      data.member_count);
+    setEl('online_count',      data.online_count);
+    setEl('total_channels',    data.total_channels);
+    setEl('text_channels',     data.text_channels);
+    setEl('voice_channels',    data.voice_channels);
+    setEl('total_roles',       data.total_roles);
+    setEl('boost_count',       data.boost_count);
+    setEl('boost_level',       data.boost_level);
+    setEl('guild_id',          data.guild_id);
+    if (data.fetched_at) setEl('fetched_at', new Date(data.fetched_at).toLocaleString());
+    if (subtitleEl) subtitleEl.textContent = 'Live server stats powered by BlazeBot.';
 
-    if (data.fetched_at) {
-      document.getElementById('fetched_at').textContent = new Date(data.fetched_at).toLocaleString();
+    const guildIconFull = document.getElementById('guild_icon');
+    if (guildIconFull && data.guild_icon) { guildIconFull.src = data.guild_icon; guildIconFull.style.display = 'block'; }
+
+    // ── Overview snapshot ──
+    setEl('ov-members',    data.member_count);
+    setEl('ov-online',     data.online_count);
+    setEl('ov-channels',   data.total_channels);
+    setEl('ov-roles',      data.total_roles);
+    setEl('ov-boosts',     data.boost_count);
+    setEl('ov-boostLevel', data.boost_level);
+
+    const ovName = document.getElementById('ov-guildName');
+    if (ovName) ovName.textContent = data.guild_name || '—';
+
+    const ovIcon = document.getElementById('ov-guildIcon');
+    if (ovIcon && data.guild_icon) { ovIcon.src = data.guild_icon; ovIcon.style.display = 'block'; }
+
+    const ovBotStatus = document.getElementById('ov-botStatus');
+    if (ovBotStatus) {
+      ovBotStatus.className   = data.bot_connected ? 'sb2 on' : 'sb2 off';
+      ovBotStatus.textContent = data.bot_connected ? 'Bot Connected' : 'Disconnected';
     }
-
-    const guildIcon = document.getElementById('guild_icon');
-    if (data.guild_icon) {
-      guildIcon.src = data.guild_icon;
-      guildIcon.style.display = 'block';
+    const ovDiscord = document.getElementById('ov-discordStatus');
+    if (ovDiscord) {
+      ovDiscord.className   = data.bot_connected ? 'sb2 on' : 'sb2 off';
+      ovDiscord.textContent = data.bot_connected ? 'Connected' : 'Disconnected';
     }
-
-    // Reset subtitle if it was showing an error hint
-    const sub = document.querySelector('.discord-overview-subtitle');
-    if (sub) sub.textContent = 'Live server stats powered by BlazeBot.';
 
   } catch (err) {
     console.error('[Discord] Failed to load stats:', err);
-    statusEl.textContent = 'Error';
+    if (statusEl) statusEl.textContent = 'Error';
   } finally {
     if (refreshBtn) { refreshBtn.disabled = false; refreshBtn.textContent = '🔄 Refresh'; }
   }
 }
 
+// ── BOOT ──────────────────────────────────
+init();
 </script>
 </body>
 </html>
